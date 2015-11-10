@@ -4,12 +4,23 @@
   "description": "Helper for running nodejs applications on Platform.sh",
   "main": "platformsh.js",
   "keywords": [
-     "platformsh",
-     "paas"
-   ],
+    "platformsh",
+    "paas"
+  ],
   "author": "Ori Pekelman <ori@platform.sh> (https://platform.sh)",
-  "license": "BSD",
+  "license": "BSD-2-Clause",
   "bugs": {
     "url": "https://github.com/platformsh/platformsh-nodejs-helper/issues"
-  }
+  },
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/platformsh/platformsh-nodejs-helper.git"
+  },
+  "homepage": "https://github.com/platformsh/platformsh-nodejs-helper#readme"
 }

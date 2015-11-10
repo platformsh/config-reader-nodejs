@@ -1,0 +1,15 @@
+{
+  "name": "platformsh",
+  "version": "0.0.1",
+  "description": "Helper for running nodejs applications on Platform.sh",
+  "main": "platformsh.js",
+  "keywords": [
+     "platformsh",
+     "paas"
+   ],
+  "author": "Ori Pekelman <ori@platform.sh> (https://platform.sh)",
+  "license": "BSD",
+  "bugs": {
+    "url": "https://github.com/platformsh/platformsh-nodejs-helper/issues"
+  }
+}

@@ -1,6 +1,6 @@
 {
   "name": "platformsh",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Helper for running nodejs applications on Platform.sh",
   "main": "platformsh.js",
   "keywords": [

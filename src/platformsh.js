@@ -2,7 +2,7 @@
 * Read number of CPUs from environment or fallback to the _private_ configuration property
 * Useful for determining the number of processes to fork.
 */
-const num_of_cpus = () => {
+function num_of_cpus() {
   try {
     if(process.env['OMP_NUM_THREADS']) {
       return process.env['OMP_NUM_THREADS'];
@@ -15,7 +15,7 @@ const num_of_cpus = () => {
   }
 };
 
-const read_base64_json = varName => {
+function read_base64_json(varName) {
   try {
     return JSON.parse(new Buffer(process.env[varName], 'base64').toString());
   } catch (err) {
@@ -26,7 +26,7 @@ const read_base64_json = varName => {
 /**
 * Reads Platform.sh configuration from environment and returns a single object
 */
-const config = () => {
+function config() {
   if(!process.env.PLATFORM_PROJECT) {
     throw Error('This is not running on platform.sh');
   }

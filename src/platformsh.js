@@ -1,3 +1,5 @@
+const jsonConfig = require('/run/config.json');
+
 /**
 * Read number of CPUs from environment or fallback to the _private_ configuration property
 * Useful for determining the number of processes to fork.
@@ -7,9 +9,8 @@ function num_of_cpus() {
     if(process.env['OMP_NUM_THREADS']) {
       return process.env['OMP_NUM_THREADS'];
     }
-    const config = require('/run/config.json');
 
-    return Math.ceil(config.info.limits.cpu);
+    return Math.ceil(jsonConfig.info.limits.cpu);
   } catch (err) {
     throw new Error('Could not get number of cpus');
   }

@@ -5,11 +5,26 @@ const assert = chai.assert;
 var mockRequire = require('mock-require');
 
 const mocks = require('./mocks');
-const platformsh = require('../src/platformsh');
+let platformsh;
 
 chai.use(require('chai-shallow-deep-equal'));
 
 describe('Config function', () => {
+  before(() => {
+    mockRequire('/run/config.json', {
+      info: {
+        limits: {
+          cpu: 1
+        }
+      }
+    });
+    platformsh = require('../src/platformsh');
+  });
+
+  after(() => {
+    mockRequire.stop('/run/config.json');
+  });
+
   describe('Without environment variables', () => {
     it('Should fire an error', () => {
       assert.throws(platformsh.config, 'This is not running on platform.sh');
@@ -64,7 +79,7 @@ describe('Config function', () => {
     });
   });
 
-  describe('Without the OMP_NUM_THREADS variable  and file not available', () => {
+  describe('Without the OMP_NUM_THREADS variable with env variable', () => {
     let backupProcessEnv = Object.assign({}, process.env);
 
     before(() => {
@@ -88,11 +103,11 @@ describe('Config function', () => {
     });
 
     it('Should throw error because the file not exist', () => {
-      assert.throws(platformsh.config, 'Could not get number of cpus');
+      assert.doesNotThrow(platformsh.config, 'Could not get number of cpus');
     });
   });
 
-  describe('Without the OMP_NUM_THREADS variable and file available', () => {
+  describe('Without the OMP_NUM_THREADS variable with json file', () => {
     let backupProcessEnv = Object.assign({}, process.env);
 
     before(() => {
@@ -109,19 +124,10 @@ describe('Config function', () => {
       process.env.PLATFORM_PROJECT_ENTROPY = mocks.PLATFORM_PROJECT_ENTROPY;
       process.env.PLATFORM_APPLICATION = mocks.PLATFORM_APPLICATION;
       process.env.PLATFORM_ROUTES = mocks.PLATFORM_ROUTES;
-
-      mockRequire('/run/config.json', {
-        info: {
-          limits: {
-            cpu: 1
-          }
-        }
-      });
     });
 
     after(() => {
       process.env = backupProcessEnv;
-      mockRequire.stop('/run/config.json');
     });
 
     it('Should throw error because the file not exist', () => {

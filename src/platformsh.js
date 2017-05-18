@@ -25,12 +25,7 @@ const read_base64_json = varName => {
 
 /**
 * Reads Platform.sh configuration from environment and returns a single object
-* Usage:
-*   # put in package.json in the dependencies
-*      "platformsh": "^0.0.3"
-*   # and in your code
-*   const config = require("platformsh").config();
-  */
+*/
 const config = () => {
   if(!process.env.PLATFORM_PROJECT) {
     throw Error('This is not running on platform.sh');

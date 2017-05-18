@@ -1,25 +1,17 @@
 # platformsh-nodejs-helper
 
-Helper for running nodejs applications on Platform.sh
+Helper for running nodejs applications on Platform.sh.
 
-##Purpose
+## Purpose
 
-Reads Platform.sh configuration from environment and returns a single object
+Reads [Platform.sh configuration](https://docs.platform.sh/development/variables.html) from environment and returns a single object.
 
-##Usage: 
-
-Put in package.json in the dependencies
-
-```json
-{
-[...]
-  "dependencies": {
-    "platformsh": "^0.0.3"
-  }
-}
+## Usage:
+```bash
+npm install platformsh --save
 ```
 And in your code:
 
 ```javascript
-var config= require("platformsh").config();
+const config = require('platformsh').config();
 ```

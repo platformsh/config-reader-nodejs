@@ -31,7 +31,7 @@ const read_base64_json = varName => {
 *   # and in your code
 *   const config = require("platformsh").config();
   */
-export const config = () => {
+const config = () => {
   if(!process.env.PLATFORM_PROJECT) {
     throw Error('This is not running on platform.sh');
   }
@@ -52,4 +52,8 @@ export const config = () => {
     port: process.env.PORT,
     omp_num_threads: num_of_cpus()
   };
+};
+
+module.exports = {
+  config
 };

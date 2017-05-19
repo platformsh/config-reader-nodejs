@@ -1,5 +1,17 @@
-const jsonConfig = require('/run/config.json');
+let jsonConfig;
 
+try{
+  jsonConfig = require('/run/config.json');
+} catch(err) {
+  // Mocking data in dev mode
+  jsonConfig = {
+    info: {
+      limits: {
+        cpu: 1
+      }
+    }
+  };
+}
 /**
 * Read number of CPUs from environment or fallback to the _private_ configuration property
 * Useful for determining the number of processes to fork.

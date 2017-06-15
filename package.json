@@ -1,26 +1,38 @@
 {
-    "name": "platformsh",
-    "version": "0.0.3",
-    "description": "Helper for running nodejs applications on Platform.sh",
-    "main": "platformsh.js",
-    "keywords": [
-        "platformsh",
-        "paas"
-    ],
-    "author": "Ori Pekelman <ori@platform.sh> (https://platform.sh)",
-    "license": "BSD-2-Clause",
-    "bugs": {
-        "url": "https://github.com/platformsh/platformsh-nodejs-helper/issues"
-    },
-    "directories": {
-        "test": "tests"
-    },
-    "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1"
-    },
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/platformsh/platformsh-nodejs-helper.git"
-    },
-    "homepage": "https://github.com/platformsh/platformsh-nodejs-helper#readme"
+  "name": "platformsh",
+  "version": "0.0.3",
+  "description": "Helper for running nodejs applications on Platform.sh",
+  "main": "lib/platformsh.min.js",
+  "keywords": [
+    "platformsh",
+    "paas"
+  ],
+  "author": "Ori Pekelman <ori@platform.sh> (https://platform.sh)",
+  "license": "BSD-2-Clause",
+  "bugs": {
+    "url": "https://github.com/platformsh/platformsh-nodejs-helper/issues"
+  },
+  "directories": {
+    "lib": "lib",
+    "src": "src",
+    "test": "tests"
+  },
+  "scripts": {
+    "lint": "./node_modules/eslint/bin/eslint.js src/",
+    "build": "mkdir -p ./lib && npm run lint && uglifyjs  --compress --mangle -o lib/platformsh.min.js -- src/platformsh.js",
+    "test": "mocha --reporter spec"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/platformsh/platformsh-nodejs-helper.git"
+  },
+  "homepage": "https://github.com/platformsh/platformsh-nodejs-helper#readme",
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "chai-shallow-deep-equal": "^1.4.6",
+    "eslint": "^3.19.0",
+    "mocha": "^3.4.1",
+    "mock-require": "^2.0.2",
+    "uglify-js": "git+https://github.com/mishoo/UglifyJS2.git#harmony"
+  }
 }

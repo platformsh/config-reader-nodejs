@@ -1,6 +1,6 @@
 {
   "name": "platformsh",
-  "version": "0.0.3",
+  "version": "2.0.0",
   "description": "Helper for running nodejs applications on Platform.sh",
   "main": "lib/platformsh.min.js",
   "keywords": [
@@ -19,8 +19,8 @@
   },
   "scripts": {
     "lint": "./node_modules/eslint/bin/eslint.js src/",
-    "build": "mkdir -p ./lib && npm run lint && uglifyjs  --compress --mangle -o lib/platformsh.min.js -- src/platformsh.js",
-    "test": "mocha --reporter spec"
+    "build": "mkdir -p ./lib && npm run lint && cp src/platformsh/js lib/platformsh.js",
+    "test": "NODE_ENV=test mocha --reporter spec"
   },
   "repository": {
     "type": "git",
@@ -28,9 +28,8 @@
   },
   "homepage": "https://github.com/platformsh/platformsh-nodejs-helper#readme",
   "devDependencies": {
-    "chai": "^3.5.0",
-    "chai-shallow-deep-equal": "^1.4.6",
-    "eslint": "^3.19.0",
+    "assert": "^1.4.1",
+    "eslint": "^5.14.1",
     "mocha": "^6.0.0"
   }
 }

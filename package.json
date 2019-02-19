@@ -31,8 +31,6 @@
     "chai": "^3.5.0",
     "chai-shallow-deep-equal": "^1.4.6",
     "eslint": "^3.19.0",
-    "mocha": "^3.4.1",
-    "mock-require": "^2.0.2",
-    "uglify-js": "git+https://github.com/mishoo/UglifyJS2.git#harmony"
+    "mocha": "^6.0.0"
   }
 }

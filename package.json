@@ -7,7 +7,7 @@
     "platformsh",
     "paas"
   ],
-  "author": "Ori Pekelman <ori@platform.sh> (https://platform.sh)",
+  "author": "Larry Garfield <larry@platform.sh> (https://platform.sh)",
   "license": "BSD-2-Clause",
   "bugs": {
     "url": "https://github.com/platformsh/platformsh-nodejs-helper/issues"

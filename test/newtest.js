@@ -238,6 +238,18 @@ describe("Config tests", () => {
         });
     });
 
+    describe("Application tests", () => {
+
+        it('returns the application array on Platform.sh', () => {
+            let c = new psh.PlatformConfig(mockEnvironmentRuntime);
+
+            let app = c.application();
+
+            assert.equal(app['type'], 'php:7.2');
+        });
+    });
+
+
     describe("Raw property tests", () => {
 
 

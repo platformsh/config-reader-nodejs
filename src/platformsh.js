@@ -43,11 +43,10 @@ class PlatformConfig {
                 this.variablesDef = decode(variables);
             }
 
-            /*
-            if (let application = this._getValue('APPLICATION')) {
-                this.applicationDef = decode($application);
+            let application = this._getValue('APPLICATION');
+            if (application) {
+                this.applicationDef = decode(application);
             }
-            */
         }
 
 
@@ -132,6 +131,14 @@ class PlatformConfig {
         }
 
         return this.variablesDef;
+    }
+
+    application() {
+        if (!this.isValidPlatform()) {
+            throw new Error('You are not running on Platform.sh, so the application definition is not available.');
+        }
+
+        return this.applicationDef;
     }
 
     _getValue(name) {

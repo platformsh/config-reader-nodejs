@@ -114,6 +114,41 @@ describe("Config tests", () => {
         });
     });
 
+    describe("onProduction() tests", () => {
 
+        it('Returns true on enterprise production', () => {
+            let mockEnvironmentEnterprise = deepClone(mockEnvironmentRuntime);
+            mockEnvironmentEnterprise['PLATFORM_MODE'] = 'enterprise';
+            mockEnvironmentEnterprise['PLATFORM_BRANCH'] = 'production';
+
+            let c = new psh.PlatformConfig(mockEnvironmentEnterprise);
+
+            assert.ok(c.onProduction());
+        });
+
+        it('Returns false on enterprise staging', () => {
+            let mockEnvironmentEnterprise = deepClone(mockEnvironmentRuntime);
+            mockEnvironmentEnterprise['PLATFORM_MODE'] = 'enterprise';
+
+            let c = new psh.PlatformConfig(mockEnvironmentEnterprise);
+
+            assert.ok(!c.onProduction());
+        });
+
+        it('Returns true on standard master', () => {
+            let mockEnvironmentProduction = deepClone(mockEnvironmentRuntime);
+            mockEnvironmentProduction['PLATFORM_BRANCH'] = 'master';
+
+            let c = new psh.PlatformConfig(mockEnvironmentProduction);
+
+            assert.ok(c.onProduction());
+        });
+
+        it('Returns false on standard dev', () => {
+            let c = new psh.PlatformConfig(mockEnvironmentRuntime);
+
+            assert.ok(!c.onProduction());
+        });
+    });
 
 });

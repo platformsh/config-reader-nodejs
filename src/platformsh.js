@@ -27,6 +27,17 @@ class PlatformConfig {
         return this.isValidPlatform() && this._getValue('MODE') == 'enterprise';
     }
 
+    onProduction() {
+        if (!this.inRuntime()) {
+            return;
+        }
+
+        let prodBranch = this.onEnterprise() ? 'production' : 'master';
+
+        return this._getValue('BRANCH') == prodBranch;
+    }
+
+
     _getValue(name) {
         let checkName = this.envPrefix + name.toUpperCase();
         return this.environment[checkName] || null;

@@ -151,4 +151,25 @@ describe("Config tests", () => {
         });
     });
 
+    describe("Route tests", () => {
+
+
+    });
+
+    describe("Relationship tests", () => {
+
+    });
+
+    describe("Variables tests", () => {
+
+
+    });
+
+    describe("Raw property tests", () => {
+
+
+    });
+
+
+
 });

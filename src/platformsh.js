@@ -11,7 +11,7 @@ class PlatformConfig {
     // envPrefix = '';
 
     constructor(env = null, prefix = 'PLATFORM_') {
-        this.environment = env || process.env;
+        this.environmentVariables = env || process.env;
         this.envPrefix = prefix;
 
         // Node doesn't support pre-defined object properties in classes, so
@@ -141,9 +141,84 @@ class PlatformConfig {
         return this.applicationDef;
     }
 
+    get appDir() {
+        this._confirmValidPlatform(`You are not running on Platform.sh, so the appDir variable are not available.`);
+        return this._getValue('APP_DIR');
+    }
+
+    get applicationName() {
+        this._confirmValidPlatform('applicationName');
+        return this._getValue('APPLICATION_NAME');
+    }
+
+    get project() {
+        this._confirmValidPlatform('project');
+        return this._getValue('PROJECT');
+    }
+
+    get treeId() {
+        this._confirmValidPlatform('treeId');
+        return this._getValue('TREE_ID');
+    }
+
+    get entropy() {
+        this._confirmValidPlatform('entropy');
+        return this._getValue('PROJECT_ENTROPY');
+    }
+
+    get branch() {
+        this._confirmValidPlatform('branch');
+        this._confirmRuntime('branch');
+        return this._getValue('BRANCH');
+    }
+
+    get environment() {
+        this._confirmValidPlatform('environment');
+        this._confirmRuntime('environment');
+        return this._getValue('ENVIRONMENT');
+    }
+
+    get documentRoot() {
+        this._confirmValidPlatform('documentRoot');
+        this._confirmRuntime('documentRoot');
+        return this._getValue('DOCUMENT_ROOT');
+    }
+
+    get smtpHost() {
+        this._confirmValidPlatform('smtpHost');
+        this._confirmRuntime('smtpHost');
+        return this._getValue('SMTP_HOST');
+    }
+
+    get port() {
+        this._confirmValidPlatform('port');
+        this._confirmRuntime('port');
+        return this.environmentVariables['PORT'];
+    }
+
+    get socket() {
+        this._confirmValidPlatform('socket');
+        this._confirmRuntime('socket');
+        return this.environmentVariables['SOCKET'];
+    }
+
+    _confirmValidPlatform(property) {
+        if (!this.isValidPlatform()) {
+            throw new Error(`You are not running on Platform.sh, so the "${property}" variable are not available.`);
+        }
+        return true;
+    }
+
+    _confirmRuntime(property) {
+        if (!this.inRuntime()) {
+            throw new Error(`The "${property}" variable is not available during build time.`);
+        }
+        return true;
+    }
+
     _getValue(name) {
         let checkName = this.envPrefix + name.toUpperCase();
-        return this.environment[checkName] || null;
+        return this.environmentVariables[checkName] || null;
     }
 
 }

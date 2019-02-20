@@ -252,7 +252,30 @@ describe("Config tests", () => {
 
     describe("Raw property tests", () => {
 
+        it('returns the correct value for raw properties', () => {
+            let c = new psh.PlatformConfig(mockEnvironmentRuntime);
 
+            assert.equal(c.appDir, '/app');
+            assert.equal(c.applicationName, 'app');
+            assert.equal(c.project, 'test-project');
+            assert.equal(c.treeId, 'abc123');
+            assert.equal(c.entropy, 'def789');
+
+            assert.equal(c.branch, 'feature-x');
+            assert.equal(c.environment, 'feature-x-hgi456');
+            assert.equal(c.documentRoot, '/app/web');
+            assert.equal(c.smtpHost, '1.2.3.4');
+            assert.equal(c.port, '8080');
+            assert.equal(c.socket, 'unix://tmp/blah.sock');
+        });
+
+        it('throws when a runtime property is accessed at build time', () => {
+            let c = new psh.PlatformConfig(mockEnvironmentBuild);
+
+            assert.throws(() => {
+                let branch = c.branch;
+            });
+        });
     });
 
 

@@ -37,13 +37,13 @@ class PlatformConfig {
                     this.relationshipsDef = decode(relationships);
                 }
             }
-            /*
-            if (this.inRuntime() && relationships = this._getValue('RELATIONSHIPS')) {
-                this.relationshipsDef = decode(relationships);
-            }
-            if (let variables = this._getValue('VARIABLES')) {
+
+            let variables = this._getValue('VARIABLES');
+            if (variables) {
                 this.variablesDef = decode(variables);
             }
+
+            /*
             if (let application = this._getValue('APPLICATION')) {
                 this.applicationDef = decode($application);
             }
@@ -116,6 +116,22 @@ class PlatformConfig {
         }
 
         return this.relationshipsDef[relationship][index];
+    }
+
+    variable(name, defaultValue = null) {
+        if (!this.isValidPlatform()) {
+            return defaultValue;
+        }
+
+        return this.variablesDef[name] || defaultValue;
+    }
+
+    variables() {
+        if (!this.isValidPlatform()) {
+            throw new Error('You are not running on Platform.sh, so the variables array is not available.');
+        }
+
+        return this.variablesDef;
     }
 
     _getValue(name) {

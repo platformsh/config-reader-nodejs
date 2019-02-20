@@ -213,7 +213,29 @@ describe("Config tests", () => {
 
     describe("Variables tests", () => {
 
+        it('returns an existing variable', () => {
+            let c = new psh.PlatformConfig(mockEnvironmentRuntime);
 
+            let value = c.variable('somevar');
+
+            assert.equal(value, 'someval');
+        });
+
+        it('returns a default value when the variable doesn\'t exist', () => {
+            let c = new psh.PlatformConfig(mockEnvironmentRuntime);
+
+            let value = c.variable('missing', 'default-val');
+
+            assert.equal(value, 'default-val');
+        });
+
+        it('returns all variables when on Platform', () => {
+            let c = new psh.PlatformConfig(mockEnvironmentRuntime);
+
+            let value = c.variables();
+
+            assert.equal(value['somevar'], 'someval');
+        });
     });
 
     describe("Raw property tests", () => {

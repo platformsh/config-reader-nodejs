@@ -27,11 +27,15 @@ class PlatformConfig {
                 let routes = this._getValue('ROUTES');
                 if (routes) {
                     this.routesDef = decode(routes);
-                }
-                for (let [url, route] of Object.entries(this.routesDef)) {
-                    route['url'] = url;
+                    for (let [url, route] of Object.entries(this.routesDef)) {
+                        route['url'] = url;
+                    }
                 }
 
+                let relationships = this._getValue('RELATIONSHIPS');
+                if (relationships) {
+                    this.relationshipsDef = decode(relationships);
+                }
             }
             /*
             if (this.inRuntime() && relationships = this._getValue('RELATIONSHIPS')) {
@@ -95,6 +99,23 @@ class PlatformConfig {
         }
 
         throw new Error(`No such route id found: ${id}`);
+    }
+
+    credentials(relationship, index = 0) {
+        if (!this.isValidPlatform()) {
+            throw new Error('You are not running on Platform.sh, so relationships are not available.');
+        }
+        if (this.inBuild()) {
+            throw new Error('Relationships are not available during the build phase.');
+        }
+        if (! this.relationshipsDef[relationship]) {
+            throw new RangeError(`No relationship defined: ${relationship}.  Check your .platform.app.yaml file.`);
+        }
+        if (! this.relationshipsDef[relationship][index]) {
+            throw new RangeError(`No index ${index} defined for relationship: ${relationship}.  Check your .platform.app.yaml file.`);
+        }
+
+        return this.relationshipsDef[relationship][index];
     }
 
     _getValue(name) {

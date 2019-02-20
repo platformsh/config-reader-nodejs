@@ -185,6 +185,30 @@ describe("Config tests", () => {
 
     describe("Relationship tests", () => {
 
+        it('returns an existing relationship by name', () => {
+            let c = new psh.PlatformConfig(mockEnvironmentRuntime);
+
+            let creds = c.credentials('database');
+
+            assert.equal(creds['scheme'], 'mysql');
+            assert.equal(creds['type'], 'mysql:10.2');
+        });
+
+        it('throws an exception for a missing relationship name', () => {
+            let c = new psh.PlatformConfig(mockEnvironmentRuntime);
+
+            assert.throws(() => {
+                let creds = c.getRoute('missing');
+            });
+        });
+
+        it('throws an exception for a missing relationship index', () => {
+            let c = new psh.PlatformConfig(mockEnvironmentRuntime);
+
+            assert.throws(() => {
+                let creds = c.getRoute('database', 3);
+            });
+        });
     });
 
     describe("Variables tests", () => {

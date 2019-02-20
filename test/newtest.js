@@ -52,7 +52,13 @@ describe("Config tests", () => {
             assert.ok(!c.isValidPlatform());
         });
 
-        it('Returns true when on Platform.sh', () => {
+        it('Returns true when on Platform.sh, build time', () => {
+            let c = new psh.PlatformConfig(mockEnvironmentBuild);
+
+            assert.ok(c.isValidPlatform());
+        });
+
+        it('Returns true when on Platform.sh, runtime', () => {
             let c = new psh.PlatformConfig(mockEnvironmentRuntime);
 
             assert.ok(c.isValidPlatform());

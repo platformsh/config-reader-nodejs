@@ -31,8 +31,8 @@ module.exports = {
     config
 };
 
-console.debug(process.env.NODE_ENV);
 
+// In testing, also expsoe the class so we can pass in test data.
 if (process.env.NODE_ENV === "test") {
     module.exports.PlatformConfig = PlatformConfig;
 }

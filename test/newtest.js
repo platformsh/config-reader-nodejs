@@ -81,8 +81,37 @@ describe("Config tests", () => {
     });
 
 
-    describe("Runtime tests", () => {
+    describe("inRuntime() tests", () => {
 
+        it('Returns true in runtime environment', () => {
+            let c = new psh.PlatformConfig(mockEnvironmentRuntime);
+
+            assert.ok(c.inRuntime());
+        });
+
+        it('Returns false in build environment', () => {
+            let c = new psh.PlatformConfig(mockEnvironmentBuild);
+
+            assert.ok(!c.inRuntime());
+        });
+    });
+
+    describe("onEnterprise() tests", () => {
+
+        it('Returns true in enterprise environment', () => {
+            let mockEnvironmentEnterprise = deepClone(mockEnvironmentRuntime);
+            mockEnvironmentEnterprise['PLATFORM_MODE'] = 'enterprise';
+
+            let c = new psh.PlatformConfig(mockEnvironmentEnterprise);
+
+            assert.ok(c.onEnterprise());
+        });
+
+        it('Returns false in standard environment', () => {
+            let c = new psh.PlatformConfig(mockEnvironmentRuntime);
+
+            assert.ok(!c.onEnterprise());
+        });
     });
 
 

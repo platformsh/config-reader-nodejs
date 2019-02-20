@@ -16,7 +16,15 @@ class PlatformConfig {
     }
 
     inBuild() {
-        return this.isValidPlatform() && !this._getValue('ENVIRONMENT');
+        return this.isValidPlatform() && !Boolean(this._getValue('ENVIRONMENT'));
+    }
+
+    inRuntime() {
+        return this.isValidPlatform() && Boolean(this._getValue('ENVIRONMENT'));
+    }
+
+    onEnterprise() {
+        return this.isValidPlatform() && this._getValue('MODE') == 'enterprise';
     }
 
     _getValue(name) {

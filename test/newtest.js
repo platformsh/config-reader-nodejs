@@ -8,10 +8,6 @@ let encode = (value) => {
     return Buffer.from(JSON.stringify(value)).toString('base64');
 };
 
-let decode = (value) => {
-    JSON.stringify(atob(value));
-};
-
 let loadJsonFile = (name) => {
     return JSON.parse(fs.readFileSync(`test/testdata/${name}.json`, 'utf8'));
 };
@@ -24,8 +20,6 @@ describe("Config tests", () => {
 
     let mockEnvironmentBuild = [];
     let mockEnvironmentRuntime = [];
-
-    console.debug(process.cwd());
 
     before(() => {
         let env = loadJsonFile('ENV');
@@ -155,7 +149,38 @@ describe("Config tests", () => {
 
     describe("Route tests", () => {
 
+        it('loads all routes in runtime', () => {
+            let c = new psh.PlatformConfig(mockEnvironmentRuntime);
 
+            let routes = c.routes();
+
+            assert.ok(typeof routes == 'object');
+            assert.equal(Object.keys(routes).length, 4);
+        });
+
+        it('throws when loading routes in build time', () => {
+            let c = new psh.PlatformConfig(mockEnvironmentBuild);
+
+            assert.throws(() => {
+                let routes = c.routes();
+            });
+        });
+
+        it('gets a route by id', () => {
+            let c = new psh.PlatformConfig(mockEnvironmentRuntime);
+
+            let route = c.getRoute('main');
+
+            assert.equal(route['original_url'], 'https://www.{default}/');
+        });
+
+        it('throws on a non-existant route id', () => {
+            let c = new psh.PlatformConfig(mockEnvironmentRuntime);
+
+            assert.throws(() => {
+                c.getRoute('missing');
+            });
+        });
     });
 
     describe("Relationship tests", () => {

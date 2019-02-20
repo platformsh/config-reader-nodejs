@@ -1,5 +1,9 @@
 'use strict';
 
+let decode = (value) => {
+    return JSON.parse(Buffer.from(value, 'base64'));
+};
+
 class PlatformConfig {
 
     // environment = [];
@@ -9,6 +13,40 @@ class PlatformConfig {
     constructor(env = null, prefix = 'PLATFORM_') {
         this.environment = env || process.env;
         this.envPrefix = prefix;
+
+        // Node doesn't support pre-defined object properties in classes, so
+        // this is mostly for documentation but also to ensure there's always
+        // a legal defined value.
+        this.routesDef = [];
+        this.relationshipsDef = [];
+        this.variablesDef = [];
+        this.applicationDef = [];
+
+        if (this.isValidPlatform()) {
+            if (this.inRuntime()) {
+                let routes = this._getValue('ROUTES');
+                if (routes) {
+                    this.routesDef = decode(routes);
+                }
+                for (let [url, route] of Object.entries(this.routesDef)) {
+                    route['url'] = url;
+                }
+
+            }
+            /*
+            if (this.inRuntime() && relationships = this._getValue('RELATIONSHIPS')) {
+                this.relationshipsDef = decode(relationships);
+            }
+            if (let variables = this._getValue('VARIABLES')) {
+                this.variablesDef = decode(variables);
+            }
+            if (let application = this._getValue('APPLICATION')) {
+                this.applicationDef = decode($application);
+            }
+            */
+        }
+
+
     }
 
     isValidPlatform() {
@@ -37,6 +75,27 @@ class PlatformConfig {
         return this._getValue('BRANCH') == prodBranch;
     }
 
+    routes() {
+        if (!this.isValidPlatform()) {
+            throw new Error('You are not running on Platform.sh, so routes are not available.');
+        }
+
+        if (this.inBuild()) {
+            throw new Error('Routes are not available during the build phase.');
+        }
+
+        return this.routesDef;
+    }
+
+    getRoute(id) {
+        for (let [url, route] of Object.entries(this.routes())) {
+            if (route.id == id) {
+                return route;
+            }
+        }
+
+        throw new Error(`No such route id found: ${id}`);
+    }
 
     _getValue(name) {
         let checkName = this.envPrefix + name.toUpperCase();

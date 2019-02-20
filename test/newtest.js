@@ -1,3 +1,5 @@
+'use strict';
+
 const assert = require('assert').strict;
 const psh = require('../src/platformsh.js');
 const fs = require('fs');

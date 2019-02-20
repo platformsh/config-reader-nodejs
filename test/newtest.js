@@ -63,11 +63,21 @@ describe("Config tests", () => {
 
             assert.ok(c.isValidPlatform());
         });
-
     });
 
-    describe("Build time tests", () => {
+    describe("inBuid() tests", () => {
 
+        it('Returns true in build environment', () => {
+            let c = new psh.PlatformConfig(mockEnvironmentBuild);
+
+            assert.ok(c.inBuild())
+        });
+
+        it('Returns false in runtime environment', () => {
+            let c = new psh.PlatformConfig(mockEnvironmentRuntime);
+
+            assert.ok(!c.inBuild())
+        });
     });
 
 

@@ -15,6 +15,10 @@ class PlatformConfig {
         return Boolean(this._getValue('APPLICATION_NAME'));
     }
 
+    inBuild() {
+        return this.isValidPlatform() && !this._getValue('ENVIRONMENT');
+    }
+
     _getValue(name) {
         let checkName = this.envPrefix + name.toUpperCase();
         return this.environment[checkName] || null;

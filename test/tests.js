@@ -259,7 +259,7 @@ describe("Config tests", () => {
             assert.equal(c.applicationName, 'app');
             assert.equal(c.project, 'test-project');
             assert.equal(c.treeId, 'abc123');
-            assert.equal(c.entropy, 'def789');
+            assert.equal(c.projectEntropy, 'def789');
 
             assert.equal(c.branch, 'feature-x');
             assert.equal(c.environment, 'feature-x-hgi456');

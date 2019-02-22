@@ -1,5 +1,9 @@
 'use strict';
 
+class NotValidPlatformError extends Error {}
+
+class BuildTimeVariableAccessError extends Error {}
+
 /**
  * Decodes a Platform.sh environment variable.
  *
@@ -132,11 +136,11 @@ class PlatformConfig {
      */
     routes() {
         if (!this.isValidPlatform()) {
-            throw new Error('You are not running on Platform.sh, so routes are not available.');
+            throw new NotValidPlatformError('You are not running on Platform.sh, so routes are not available.');
         }
 
         if (this.inBuild()) {
-            throw new Error('Routes are not available during the build phase.');
+            throw new BuildTimeVariableAccessError('Routes are not available during the build phase.');
         }
 
         return this.routesDef;
@@ -184,10 +188,10 @@ class PlatformConfig {
      */
     credentials(relationship, index = 0) {
         if (!this.isValidPlatform()) {
-            throw new Error('You are not running on Platform.sh, so relationships are not available.');
+            throw new NotValidPlatformError('You are not running on Platform.sh, so relationships are not available.');
         }
         if (this.inBuild()) {
-            throw new Error('Relationships are not available during the build phase.');
+            throw new BuildTimeVariableAccessError('Relationships are not available during the build phase.');
         }
         if (! this.relationshipsDef[relationship]) {
             throw new RangeError(`No relationship defined: ${relationship}.  Check your .platform.app.yaml file.`);
@@ -232,7 +236,7 @@ class PlatformConfig {
      */
     variables() {
         if (!this.isValidPlatform()) {
-            throw new Error('You are not running on Platform.sh, so the variables array is not available.');
+            throw new NotValidPlatformError('You are not running on Platform.sh, so the variables array is not available.');
         }
 
         return this.variablesDef;
@@ -249,7 +253,7 @@ class PlatformConfig {
      */
     application() {
         if (!this.isValidPlatform()) {
-            throw new Error('You are not running on Platform.sh, so the application definition is not available.');
+            throw new NotValidPlatformError('You are not running on Platform.sh, so the application definition is not available.');
         }
 
         return this.applicationDef;
@@ -299,7 +303,7 @@ class PlatformConfig {
     }
 
     /**
-     * The project entropy value.
+     * The project project entropy value.
      *
      * This random value is created when the project is first created, which is then stable
      * throughout the project’s life. It should be used for application-specific unique-instance
@@ -307,8 +311,8 @@ class PlatformConfig {
      *
      * @returns {string}
      */
-    get entropy() {
-        this._confirmValidPlatform('entropy');
+    get projectEntropy() {
+        this._confirmValidPlatform('projectEntropy');
         return this._getValue('PROJECT_ENTROPY');
     }
 
@@ -391,7 +395,7 @@ class PlatformConfig {
      */
     _confirmValidPlatform(property) {
         if (!this.isValidPlatform()) {
-            throw new Error(`You are not running on Platform.sh, so the "${property}" variable are not available.`);
+            throw new NotValidPlatformError(`You are not running on Platform.sh, so the "${property}" variable are not available.`);
         }
         return true;
     }
@@ -407,7 +411,7 @@ class PlatformConfig {
      */
     _confirmRuntime(property) {
         if (!this.inRuntime()) {
-            throw new Error(`The "${property}" variable is not available during build time.`);
+            throw new BuildTimeVariableAccessError(`The "${property}" variable is not available during build time.`);
         }
         return true;
     }

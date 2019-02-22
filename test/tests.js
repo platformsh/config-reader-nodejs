@@ -4,17 +4,17 @@ const assert = require('assert').strict;
 const psh = require('../src/platformsh.js');
 const fs = require('fs');
 
-let encode = (value) => {
+function encode(value) {
     return Buffer.from(JSON.stringify(value)).toString('base64');
-};
+}
 
-let loadJsonFile = (name) => {
+function loadJsonFile(name) {
     return JSON.parse(fs.readFileSync(`test/testdata/${name}.json`, 'utf8'));
-};
+}
 
-let deepClone = (obj) => {
+function deepClone(obj) {
     return JSON.parse(JSON.stringify(obj));
-};
+}
 
 describe("Config tests", () => {
 

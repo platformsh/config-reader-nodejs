@@ -9,9 +9,9 @@
  * @return {any}
  *   An associative array (if representing a JSON object), or a scalar type.
  */
-let decode = (value) => {
+function decode (value) {
     return JSON.parse(Buffer.from(value, 'base64'));
-};
+}
 
 /**
  * Class representing a Platform.sh environment configuration.
@@ -30,33 +30,34 @@ class PlatformConfig {
         this.variablesDef = [];
         this.applicationDef = [];
 
-        if (this.isValidPlatform()) {
-            if (this.inRuntime()) {
-                let routes = this._getValue('ROUTES');
-                if (routes) {
-                    this.routesDef = decode(routes);
-                    for (let [url, route] of Object.entries(this.routesDef)) {
-                        route['url'] = url;
-                    }
-                }
+        if (!this.isValidPlatform()) {
+            return;
+        }
 
-                let relationships = this._getValue('RELATIONSHIPS');
-                if (relationships) {
-                    this.relationshipsDef = decode(relationships);
+        if (this.inRuntime()) {
+            let routes = this._getValue('ROUTES');
+            if (routes) {
+                this.routesDef = decode(routes);
+                for (let [url, route] of Object.entries(this.routesDef)) {
+                    route['url'] = url;
                 }
             }
 
-            let variables = this._getValue('VARIABLES');
-            if (variables) {
-                this.variablesDef = decode(variables);
-            }
-
-            let application = this._getValue('APPLICATION');
-            if (application) {
-                this.applicationDef = decode(application);
+            let relationships = this._getValue('RELATIONSHIPS');
+            if (relationships) {
+                this.relationshipsDef = decode(relationships);
             }
         }
 
+        let variables = this._getValue('VARIABLES');
+        if (variables) {
+            this.variablesDef = decode(variables);
+        }
+
+        let application = this._getValue('APPLICATION');
+        if (application) {
+            this.applicationDef = decode(application);
+        }
 
     }
 
@@ -217,7 +218,7 @@ class PlatformConfig {
             return defaultValue;
         }
 
-        return this.variablesDef[name] || defaultValue;
+        return this.variablesDef.hasOwnProperty(name) ? this.variablesDef[name] : defaultValue;
     }
 
     /**

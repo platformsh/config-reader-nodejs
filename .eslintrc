@@ -1,8 +1,4 @@
 {
-  "ecmaFeatures": {
-    "globalReturn": true,
-    "modules": true
-  },
 
   "env": {
     "es6": true,
@@ -56,7 +52,7 @@
     "key-spacing": [2, { "beforeColon": false, "afterColon": true }],
     "linebreak-style": 0,
     "max-depth": 0,
-    "max-len": [2, 120, 4],
+    "max-len": [2, 160, 4],
     "max-nested-callbacks": 0,
     "max-params": 0,
     "max-statements": 0,

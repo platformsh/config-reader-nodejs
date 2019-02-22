@@ -13,7 +13,7 @@ class BuildTimeVariableAccessError extends Error {}
  * @return {any}
  *   An associative array (if representing a JSON object), or a scalar type.
  */
-function decode (value) {
+function decode(value) {
     return JSON.parse(Buffer.from(value, 'base64'));
 }
 
@@ -40,6 +40,7 @@ class PlatformConfig {
 
         if (this.inRuntime()) {
             let routes = this._getValue('ROUTES');
+
             if (routes) {
                 this.routesDef = decode(routes);
                 for (let [url, route] of Object.entries(this.routesDef)) {
@@ -48,17 +49,20 @@ class PlatformConfig {
             }
 
             let relationships = this._getValue('RELATIONSHIPS');
+
             if (relationships) {
                 this.relationshipsDef = decode(relationships);
             }
         }
 
         let variables = this._getValue('VARIABLES');
+
         if (variables) {
             this.variablesDef = decode(variables);
         }
 
         let application = this._getValue('APPLICATION');
+
         if (application) {
             this.applicationDef = decode(application);
         }
@@ -83,7 +87,7 @@ class PlatformConfig {
      * @return {boolean}
      */
     inBuild() {
-        return this.isValidPlatform() && !Boolean(this._getValue('ENVIRONMENT'));
+        return this.isValidPlatform() && !this._getValue('ENVIRONMENT');
     }
 
     /**
@@ -102,7 +106,7 @@ class PlatformConfig {
      *   True on an Enterprise environment, False otherwise.
      */
     onEnterprise() {
-        return this.isValidPlatform() && this._getValue('MODE') == 'enterprise';
+        return this.isValidPlatform() && this._getValue('MODE') === 'enterprise';
     }
 
     /**
@@ -123,7 +127,7 @@ class PlatformConfig {
 
         let prodBranch = this.onEnterprise() ? 'production' : 'master';
 
-        return this._getValue('BRANCH') == prodBranch;
+        return this._getValue('BRANCH') === prodBranch;
     }
 
     /**
@@ -160,8 +164,9 @@ class PlatformConfig {
      *   If there is no route by that ID, an exception is thrown.
      */
     getRoute(id) {
-        for (let [url, route] of Object.entries(this.routes())) {
-            if (route.id == id) {
+        // eslint-disable-next-line no-unused-vars
+        for (const [url, route] of Object.entries(this.routes())) {
+            if (route.id === id) {
                 return route;
             }
         }
@@ -193,10 +198,10 @@ class PlatformConfig {
         if (this.inBuild()) {
             throw new BuildTimeVariableAccessError('Relationships are not available during the build phase.');
         }
-        if (! this.relationshipsDef[relationship]) {
+        if (!this.relationshipsDef[relationship]) {
             throw new RangeError(`No relationship defined: ${relationship}.  Check your .platform.app.yaml file.`);
         }
-        if (! this.relationshipsDef[relationship][index]) {
+        if (!this.relationshipsDef[relationship][index]) {
             throw new RangeError(`No index ${index} defined for relationship: ${relationship}.  Check your .platform.app.yaml file.`);
         }
 
@@ -265,7 +270,7 @@ class PlatformConfig {
      * @returns {string}
      */
     get appDir() {
-        this._confirmValidPlatform(`You are not running on Platform.sh, so the appDir variable are not available.`);
+        this._confirmValidPlatform('You are not running on Platform.sh, so the appDir variable are not available.');
         return this._getValue('APP_DIR');
     }
 
@@ -425,9 +430,9 @@ class PlatformConfig {
      */
     _getValue(name) {
         let checkName = this.envPrefix + name.toUpperCase();
+
         return this.environmentVariables[checkName] || null;
     }
-
 }
 
 /**
@@ -444,9 +449,8 @@ module.exports = {
     config
 };
 
-
 // In testing, also expsoe the class so we can pass in test data.
-if (process.env.NODE_ENV === "test") {
+if (process.env.NODE_ENV === 'test') {
     module.exports.PlatformConfig = PlatformConfig;
 }
 

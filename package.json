@@ -20,7 +20,7 @@
   "scripts": {
     "lint": "./node_modules/eslint/bin/eslint.js src/",
     "prepare": "npm run build",
-    "build": "mkdir -p ./lib && npm run lint && cp src/platformsh/js lib/platformsh.js",
+    "build": "mkdir -p ./lib && cp src/platformsh/js lib/platformsh.js",
     "test": "NODE_ENV=test mocha --reporter spec"
   },
   "repository": {

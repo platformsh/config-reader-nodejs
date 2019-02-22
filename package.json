@@ -2,7 +2,7 @@
   "name": "platformsh",
   "version": "2.0.0",
   "description": "Helper for running nodejs applications on Platform.sh",
-  "main": "lib/platformsh.min.js",
+  "main": "lib/platformsh.js",
   "keywords": [
     "platformsh",
     "paas"

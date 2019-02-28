@@ -8,10 +8,10 @@ Reads [Platform.sh configuration](https://docs.platform.sh/development/variables
 
 ## Usage:
 ```bash
-npm install platformsh --save
+npm install platformsh-config --save
 ```
 And in your code:
 
 ```javascript
-const config = require('platformsh').config();
+const config = require('platformsh-config').config();
 ```

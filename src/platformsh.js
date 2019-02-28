@@ -108,6 +108,7 @@ class Config {
     }
 
     /**
+     * Returns credentials for the specified relationship as formatted by the specified formatter.
      *
      * @param {string} relationship
      *   The relationship whose credentials should be formatted.

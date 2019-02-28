@@ -115,7 +115,8 @@ class Config {
      * @param {string} formatter
      *   The registered formatter to use.  This must match a formatter previously registered
      *   with registerFormatter().
-     *
+     * @return mixed
+     *   The credentials formatted with the given formatter.
      */
     formattedCredentials(relationship, formatter) {
         if (!this.credentialFormatters.hasOwnProperty(formatter)) {
@@ -511,6 +512,7 @@ function nodeSolrFormatter(credentials) {
 
 /**
  * Returns a connection string appropriate for the mongodb library.
+ *
  * @param credentials
  *   A mongodb credentials object
  * @returns {string}

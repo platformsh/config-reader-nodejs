@@ -20,7 +20,7 @@ function decode(value) {
 /**
  * Class representing a Platform.sh environment configuration.
  */
-class PlatformConfig {
+class Config {
 
     constructor(env = null, prefix = 'PLATFORM_') {
         this.environmentVariables = env || process.env;
@@ -436,13 +436,13 @@ class PlatformConfig {
 }
 
 /**
- * Creates a new PlatformConfig instance that represents the current environment.
+ * Creates a new Config instance that represents the current environment.
  *
- * @returns {PlatformConfig}
+ * @returns {Config}
  */
 function config() {
 
-    return new PlatformConfig();
+    return new Config();
 }
 
 module.exports = {
@@ -451,6 +451,6 @@ module.exports = {
 
 // In testing, also expsoe the class so we can pass in test data.
 if (process.env.NODE_ENV === 'test') {
-    module.exports.PlatformConfig = PlatformConfig;
+    module.exports.Config = Config;
 }
 

@@ -43,19 +43,19 @@ describe("Config tests", () => {
     describe("isValidPlatform() tests", () => {
 
         it('Returns false when not on Platform.sh', () => {
-            let c = new psh.PlatformConfig();
+            let c = new psh.Config();
 
             assert.ok(!c.isValidPlatform());
         });
 
         it('Returns true when on Platform.sh, build time', () => {
-            let c = new psh.PlatformConfig(mockEnvironmentBuild);
+            let c = new psh.Config(mockEnvironmentBuild);
 
             assert.ok(c.isValidPlatform());
         });
 
         it('Returns true when on Platform.sh, runtime', () => {
-            let c = new psh.PlatformConfig(mockEnvironmentRuntime);
+            let c = new psh.Config(mockEnvironmentRuntime);
 
             assert.ok(c.isValidPlatform());
         });
@@ -64,13 +64,13 @@ describe("Config tests", () => {
     describe("inBuid() tests", () => {
 
         it('Returns true in build environment', () => {
-            let c = new psh.PlatformConfig(mockEnvironmentBuild);
+            let c = new psh.Config(mockEnvironmentBuild);
 
             assert.ok(c.inBuild())
         });
 
         it('Returns false in runtime environment', () => {
-            let c = new psh.PlatformConfig(mockEnvironmentRuntime);
+            let c = new psh.Config(mockEnvironmentRuntime);
 
             assert.ok(!c.inBuild())
         });
@@ -80,13 +80,13 @@ describe("Config tests", () => {
     describe("inRuntime() tests", () => {
 
         it('Returns true in runtime environment', () => {
-            let c = new psh.PlatformConfig(mockEnvironmentRuntime);
+            let c = new psh.Config(mockEnvironmentRuntime);
 
             assert.ok(c.inRuntime());
         });
 
         it('Returns false in build environment', () => {
-            let c = new psh.PlatformConfig(mockEnvironmentBuild);
+            let c = new psh.Config(mockEnvironmentBuild);
 
             assert.ok(!c.inRuntime());
         });
@@ -98,13 +98,13 @@ describe("Config tests", () => {
             let mockEnvironmentEnterprise = deepClone(mockEnvironmentRuntime);
             mockEnvironmentEnterprise['PLATFORM_MODE'] = 'enterprise';
 
-            let c = new psh.PlatformConfig(mockEnvironmentEnterprise);
+            let c = new psh.Config(mockEnvironmentEnterprise);
 
             assert.ok(c.onEnterprise());
         });
 
         it('Returns false in standard environment', () => {
-            let c = new psh.PlatformConfig(mockEnvironmentRuntime);
+            let c = new psh.Config(mockEnvironmentRuntime);
 
             assert.ok(!c.onEnterprise());
         });
@@ -117,7 +117,7 @@ describe("Config tests", () => {
             mockEnvironmentEnterprise['PLATFORM_MODE'] = 'enterprise';
             mockEnvironmentEnterprise['PLATFORM_BRANCH'] = 'production';
 
-            let c = new psh.PlatformConfig(mockEnvironmentEnterprise);
+            let c = new psh.Config(mockEnvironmentEnterprise);
 
             assert.ok(c.onProduction());
         });
@@ -126,7 +126,7 @@ describe("Config tests", () => {
             let mockEnvironmentEnterprise = deepClone(mockEnvironmentRuntime);
             mockEnvironmentEnterprise['PLATFORM_MODE'] = 'enterprise';
 
-            let c = new psh.PlatformConfig(mockEnvironmentEnterprise);
+            let c = new psh.Config(mockEnvironmentEnterprise);
 
             assert.ok(!c.onProduction());
         });
@@ -135,13 +135,13 @@ describe("Config tests", () => {
             let mockEnvironmentProduction = deepClone(mockEnvironmentRuntime);
             mockEnvironmentProduction['PLATFORM_BRANCH'] = 'master';
 
-            let c = new psh.PlatformConfig(mockEnvironmentProduction);
+            let c = new psh.Config(mockEnvironmentProduction);
 
             assert.ok(c.onProduction());
         });
 
         it('Returns false on standard dev', () => {
-            let c = new psh.PlatformConfig(mockEnvironmentRuntime);
+            let c = new psh.Config(mockEnvironmentRuntime);
 
             assert.ok(!c.onProduction());
         });
@@ -150,7 +150,7 @@ describe("Config tests", () => {
     describe("Route tests", () => {
 
         it('loads all routes in runtime', () => {
-            let c = new psh.PlatformConfig(mockEnvironmentRuntime);
+            let c = new psh.Config(mockEnvironmentRuntime);
 
             let routes = c.routes();
 
@@ -159,7 +159,7 @@ describe("Config tests", () => {
         });
 
         it('throws when loading routes in build time', () => {
-            let c = new psh.PlatformConfig(mockEnvironmentBuild);
+            let c = new psh.Config(mockEnvironmentBuild);
 
             assert.throws(() => {
                 let routes = c.routes();
@@ -167,7 +167,7 @@ describe("Config tests", () => {
         });
 
         it('gets a route by id', () => {
-            let c = new psh.PlatformConfig(mockEnvironmentRuntime);
+            let c = new psh.Config(mockEnvironmentRuntime);
 
             let route = c.getRoute('main');
 
@@ -175,7 +175,7 @@ describe("Config tests", () => {
         });
 
         it('throws on a non-existant route id', () => {
-            let c = new psh.PlatformConfig(mockEnvironmentRuntime);
+            let c = new psh.Config(mockEnvironmentRuntime);
 
             assert.throws(() => {
                 c.getRoute('missing');
@@ -186,7 +186,7 @@ describe("Config tests", () => {
     describe("Relationship tests", () => {
 
         it('returns an existing relationship by name', () => {
-            let c = new psh.PlatformConfig(mockEnvironmentRuntime);
+            let c = new psh.Config(mockEnvironmentRuntime);
 
             let creds = c.credentials('database');
 
@@ -195,7 +195,7 @@ describe("Config tests", () => {
         });
 
         it('throws an exception for a missing relationship name', () => {
-            let c = new psh.PlatformConfig(mockEnvironmentRuntime);
+            let c = new psh.Config(mockEnvironmentRuntime);
 
             assert.throws(() => {
                 let creds = c.getRoute('missing');
@@ -203,7 +203,7 @@ describe("Config tests", () => {
         });
 
         it('throws an exception for a missing relationship index', () => {
-            let c = new psh.PlatformConfig(mockEnvironmentRuntime);
+            let c = new psh.Config(mockEnvironmentRuntime);
 
             assert.throws(() => {
                 let creds = c.getRoute('database', 3);
@@ -214,7 +214,7 @@ describe("Config tests", () => {
     describe("Variables tests", () => {
 
         it('returns an existing variable', () => {
-            let c = new psh.PlatformConfig(mockEnvironmentRuntime);
+            let c = new psh.Config(mockEnvironmentRuntime);
 
             let value = c.variable('somevar');
 
@@ -222,7 +222,7 @@ describe("Config tests", () => {
         });
 
         it('returns a default value when the variable doesn\'t exist', () => {
-            let c = new psh.PlatformConfig(mockEnvironmentRuntime);
+            let c = new psh.Config(mockEnvironmentRuntime);
 
             let value = c.variable('missing', 'default-val');
 
@@ -230,7 +230,7 @@ describe("Config tests", () => {
         });
 
         it('returns all variables when on Platform', () => {
-            let c = new psh.PlatformConfig(mockEnvironmentRuntime);
+            let c = new psh.Config(mockEnvironmentRuntime);
 
             let value = c.variables();
 
@@ -241,7 +241,7 @@ describe("Config tests", () => {
     describe("Application tests", () => {
 
         it('returns the application array on Platform.sh', () => {
-            let c = new psh.PlatformConfig(mockEnvironmentRuntime);
+            let c = new psh.Config(mockEnvironmentRuntime);
 
             let app = c.application();
 
@@ -253,7 +253,7 @@ describe("Config tests", () => {
     describe("Raw property tests", () => {
 
         it('returns the correct value for raw properties', () => {
-            let c = new psh.PlatformConfig(mockEnvironmentRuntime);
+            let c = new psh.Config(mockEnvironmentRuntime);
 
             assert.equal(c.appDir, '/app');
             assert.equal(c.applicationName, 'app');
@@ -270,7 +270,7 @@ describe("Config tests", () => {
         });
 
         it('throws when a runtime property is accessed at build time', () => {
-            let c = new psh.PlatformConfig(mockEnvironmentBuild);
+            let c = new psh.Config(mockEnvironmentBuild);
 
             assert.throws(() => {
                 let branch = c.branch;

@@ -4,6 +4,8 @@ class NotValidPlatformError extends Error {}
 
 class BuildTimeVariableAccessError extends Error {}
 
+class NoCredentialFormatterFoundError extends Error {}
+
 /**
  * Decodes a Platform.sh environment variable.
  *
@@ -33,6 +35,7 @@ class Config {
         this.relationshipsDef = [];
         this.variablesDef = [];
         this.applicationDef = [];
+        this.credentialFormatters = {};
 
         if (!this.isValidPlatform()) {
             return;
@@ -66,7 +69,53 @@ class Config {
         if (application) {
             this.applicationDef = decode(application);
         }
+    }
 
+    /**
+     * Callback for adding two numbers.
+     *
+     * @callback registerFormatterCallback
+     * @param {object} credentials
+     *   A credential array, as returned by the credentials() method.
+     * @return {mixed}
+     *   The formatted credentials. The format will vary depending on the
+     *   client library it is intended for, but usually either a string or an object.
+     */
+
+    /**
+     * Adds a credential formatter to the configuration.
+     *
+     * A credential formatter is responsible for formatting the credentials for a relationship
+     * in a way expected by a particular client library.  For instance, it can take the credentials
+     * from Platform.sh for a PostgreSQL database and format them into a URL string expected by
+     * a particular PostgreSQL client library.  Use the formattedCredentials() method to get
+     * the formatted version of a particular relationship.
+     *
+     * @param {string} name
+     *   The name of the formatter.  This may be any arbitrary alphanumeric string.
+     * @param {registerFormatterCallback} formatter
+     *   A callback function that will format relationship credentials for a specific client library.
+     *
+     */
+    registerFormatter(name, formatter) {
+        this.credentialFormatters[name] = formatter;
+    }
+
+    /**
+     *
+     * @param {string} relationship
+     *   The relationship whose credentials should be formatted.
+     * @param {string} formatter
+     *   The registered formatter to use.  This must match a formatter previously registered
+     *   with registerFormatter().
+     *
+     */
+    formattedCredentials(relationship, formatter) {
+        if (!this.credentialFormatters.hasOwnProperty(formatter)) {
+            throw new NoCredentialFormatterFoundError(`There is no credential formatter named "${formatter}" registered. Did you remember to call registerFormatter()?`);
+        }
+
+        return this.credentialFormatters[formatter](this.credentials(relationship));
     }
 
     /**

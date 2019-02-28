@@ -278,6 +278,31 @@ describe("Config tests", () => {
         });
     });
 
+    describe('Credential formatter tests', () => {
 
+        it('throws when a formatter is not found', () => {
+            let c = new psh.Config(mockEnvironmentRuntime);
+
+            assert.throws(() => {
+                c.formattedCredentials('database', 'not-existing');
+            });
+        });
+
+        it('calls a registered formatter', () => {
+            let c = new psh.Config(mockEnvironmentRuntime);
+            let called = false;
+
+            c.registerFormatter('test', (credentials) => {
+                called = true;
+                return 'stuff';
+            });
+
+            let formatted = c.formattedCredentials('database', 'test');
+
+            assert.ok(called);
+            assert.equal(formatted, 'stuff');
+
+        });
+    });
 
 });

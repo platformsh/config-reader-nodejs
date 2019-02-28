@@ -56,6 +56,8 @@ class Config {
             if (relationships) {
                 this.relationshipsDef = decode(relationships);
             }
+
+            this.registerFormatter('solr-node', nodeSolrFormatter);
         }
 
         let variables = this._getValue('VARIABLES');
@@ -481,6 +483,25 @@ class Config {
         let checkName = this.envPrefix + name.toUpperCase();
 
         return this.environmentVariables[checkName] || null;
+    }
+}
+
+
+/**
+ * Returns a connection object appropriate for the solr-node library.
+ *
+ * @param credentials
+ *   A solr credentials object.
+ * @returns {object}
+ *   A credentials object to pass to new SolrNode().
+ * @private
+ */
+function nodeSolrFormatter(credentials) {
+    return {
+        host: credentials.host,
+        port: credentials.port,
+        core: credentials.path.split('/').slice(-1)[0],
+        protocol: 'http'
     }
 }
 

@@ -301,8 +301,22 @@ describe("Config tests", () => {
 
             assert.ok(called);
             assert.equal(formatted, 'stuff');
-
         });
+
+        it('formats a solr-node connection', () => {
+            let c = new psh.Config(mockEnvironmentRuntime);
+
+            let formatted = c.formattedCredentials('solr', 'solr-node');
+
+            assert.deepEqual(formatted, {
+                host: 'solr.internal',
+                port: 8080,
+                protocol: 'http',
+                core: 'collection1'
+            });
+        });
+
+
     });
 
 });

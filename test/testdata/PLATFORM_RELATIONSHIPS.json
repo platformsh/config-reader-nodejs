@@ -38,5 +38,19 @@
          "cluster" : "dtsla3sy7euhc-master-7rqtwti",
          "scheme" : "http"
       }
+   ],
+   "solr" : [
+      {
+         "ip" : "169.254.177.78",
+         "host" : "solr.internal",
+         "path" : "solr/collection1",
+         "port" : 8080,
+         "cluster" : "rjify4yjcwxaa-pr-6-3qodc7y",
+         "service" : "solr",
+         "type" : "solr:7.6",
+         "rel" : "solr",
+         "hostname" : "dg3c6xro44gl5tuxqbqf5flvhu.solr.service._.eu-3.platformsh.site",
+         "scheme" : "solr"
+      }
    ]
 }

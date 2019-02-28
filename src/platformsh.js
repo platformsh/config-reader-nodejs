@@ -58,6 +58,7 @@ class Config {
             }
 
             this.registerFormatter('solr-node', nodeSolrFormatter);
+            this.registerFormatter('mongodb', mongodbFormatter);
         }
 
         let variables = this._getValue('VARIABLES');
@@ -494,7 +495,6 @@ class Config {
  *   A solr credentials object.
  * @returns {object}
  *   A credentials object to pass to new SolrNode().
- * @private
  */
 function nodeSolrFormatter(credentials) {
     return {
@@ -503,6 +503,17 @@ function nodeSolrFormatter(credentials) {
         core: credentials.path.split('/').slice(-1)[0],
         protocol: 'http'
     }
+}
+
+/**
+ * Returns a connection string appropriate for the mongodb library.
+ * @param credentials
+ *   A mongodb credentials object
+ * @returns {string}
+ *   A connection string to pass to MongoClient.connect().
+ */
+function mongodbFormatter(credentials) {
+    return `mongodb://${credentials["username"]}:${credentials["password"]}@${credentials["host"]}:${credentials["port"]}/${credentials["path"]}`;
 }
 
 /**

@@ -75,7 +75,7 @@ class Config {
     }
 
     /**
-     * Callback for adding two numbers.
+     * Callback for formatting a set of credentials for a particular library.
      *
      * @callback registerFormatterCallback
      * @param {object} credentials

@@ -10,7 +10,7 @@
   "author": "Larry Garfield <larry@platform.sh> (https://platform.sh)",
   "license": "BSD-2-Clause",
   "bugs": {
-    "url": "https://github.com/platformsh/platformsh-nodejs-helper/issues"
+    "url": "https://github.com/platformsh/config-reader-nodejs/issues"
   },
   "directories": {
     "lib": "lib",
@@ -25,9 +25,9 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/platformsh/platformsh-nodejs-helper.git"
+    "url": "git+https://github.com/platformsh/config-reader-nodejs.git"
   },
-  "homepage": "https://github.com/platformsh/platformsh-nodejs-helper#readme",
+  "homepage": "https://github.com/platformsh/config-reader-nodejs#readme",
   "devDependencies": {
     "assert": "^1.4.1",
     "eslint": "^5.14.1",

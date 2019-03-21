@@ -232,6 +232,18 @@ class Config {
     }
 
     /**
+     * Determines if a relationship is defined, and thus has credentials available.
+     *
+     * @param {string} relationship
+     *   The name of the relationship to check.
+     * @return {boolean}
+     *   True if the relationship is defined, false otherwise.
+     */
+    hasRelationship(relationship) {
+        return Boolean(this.relationshipsDef[relationship]);
+    }
+
+    /**
      * Retrieves the credentials for accessing a relationship.
      *
      * The relationship must be defined in the .platform.app.yaml file.

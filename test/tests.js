@@ -211,6 +211,21 @@ describe("Config tests", () => {
         });
     });
 
+    describe('hasRelationship tests', () => {
+
+        if('returns true for an existing relationship', () => {
+            let c = new psh.Config(mockEnvironmentRuntime);
+
+            assert.ok(c.hasRelationship('database'));
+        });
+
+        if('returns false for an missing relationship', () => {
+            let c = new psh.Config(mockEnvironmentRuntime);
+
+            assert.ok(c.hasRelationship('missing'));
+        });
+    });
+
     describe("Variables tests", () => {
 
         it('returns an existing variable', () => {

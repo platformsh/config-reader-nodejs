@@ -8,7 +8,7 @@
     "paas"
   ],
   "author": "Larry Garfield <larry@platform.sh> (https://platform.sh)",
-  "license": "BSD-2-Clause",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/platformsh/config-reader-nodejs/issues"
   },

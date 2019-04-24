@@ -181,6 +181,20 @@ describe("Config tests", () => {
                 c.getRoute('missing');
             });
         });
+
+
+        it('loads all routes in local', () => {
+            let env = deepClone(mockEnvironmentRuntime);
+            delete env['PLATFORM_APPLICATION_NAME'];
+            delete env['PLATFORM_ENVIRONMENT'];
+            delete env['PLATFORM_BRANCH'];
+             let c = new psh.Config(env);
+
+            let routes = c.routes();
+
+            assert.ok(typeof routes == 'object');
+            assert.equal(Object.keys(routes).length, 4);
+        });
     });
 
     describe("Relationship tests", () => {

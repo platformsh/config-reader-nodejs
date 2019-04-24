@@ -37,38 +37,28 @@ class Config {
         this.applicationDef = [];
         this.credentialFormatters = {};
 
-        if (!this.isValidPlatform()) {
-            return;
+        let routes = this._getValue('ROUTES');
+        if (routes) {
+            this.routesDef = decode(routes);
+            for (let [url, route] of Object.entries(this.routesDef)) {
+                route['url'] = url;
+            }
         }
 
-        if (this.inRuntime()) {
-            let routes = this._getValue('ROUTES');
-
-            if (routes) {
-                this.routesDef = decode(routes);
-                for (let [url, route] of Object.entries(this.routesDef)) {
-                    route['url'] = url;
-                }
-            }
-
-            let relationships = this._getValue('RELATIONSHIPS');
-
-            if (relationships) {
-                this.relationshipsDef = decode(relationships);
-            }
-
-            this.registerFormatter('solr-node', nodeSolrFormatter);
-            this.registerFormatter('mongodb', mongodbFormatter);
+        let relationships = this._getValue('RELATIONSHIPS');
+        if (relationships) {
+            this.relationshipsDef = decode(relationships);
         }
+
+        this.registerFormatter('solr-node', nodeSolrFormatter);
+        this.registerFormatter('mongodb', mongodbFormatter);
 
         let variables = this._getValue('VARIABLES');
-
         if (variables) {
             this.variablesDef = decode(variables);
         }
 
         let application = this._getValue('APPLICATION');
-
         if (application) {
             this.applicationDef = decode(application);
         }
@@ -196,12 +186,12 @@ class Config {
      *   If the routes are not accessible due to being in the wrong environment.
      */
     routes() {
-        if (!this.isValidPlatform()) {
-            throw new NotValidPlatformError('You are not running on Platform.sh, so routes are not available.');
-        }
-
         if (this.inBuild()) {
             throw new BuildTimeVariableAccessError('Routes are not available during the build phase.');
+        }
+
+        if (!this.routesDef) {
+            throw new NotValidPlatformError('No routes defined.  Are you sure you are running on Platform.sh?');
         }
 
         return this.routesDef;
@@ -261,12 +251,15 @@ class Config {
      *   If the relationship/index pair requested does not exist.
      */
     credentials(relationship, index = 0) {
-        if (!this.isValidPlatform()) {
-            throw new NotValidPlatformError('You are not running on Platform.sh, so relationships are not available.');
+        if (!this.relationshipsDef) {
+            if (this.inBuild()) {
+                throw new BuildTimeVariableAccessError('Relationships are not available during the build phase.');
+            }
+            throw new NotValidPlatformError('No relationships are defined. Are you sure you are on Platform.sh?'
+                + '  If you\'re running on your local system you may need to create a tunnel'
+                + ' to access your environment services.  See https://docs.platform.sh/gettingstarted/local/tethered.html');
         }
-        if (this.inBuild()) {
-            throw new BuildTimeVariableAccessError('Relationships are not available during the build phase.');
-        }
+
         if (!this.relationshipsDef[relationship]) {
             throw new RangeError(`No relationship defined: ${relationship}.  Check your .platform.app.yaml file.`);
         }
@@ -292,10 +285,6 @@ class Config {
      *   The value of the variable, or the specified default.  This may be a string or an array.
      */
     variable(name, defaultValue = null) {
-        if (!this.isValidPlatform()) {
-            return defaultValue;
-        }
-
         return this.variablesDef.hasOwnProperty(name) ? this.variablesDef[name] : defaultValue;
     }
 
@@ -309,8 +298,8 @@ class Config {
      *   The full variables definition.
      */
     variables() {
-        if (!this.isValidPlatform()) {
-            throw new NotValidPlatformError('You are not running on Platform.sh, so the variables array is not available.');
+        if (!this.variablesDef) {
+            throw new NotValidPlatformError('No variables are defined.  Are you sure you are running on Platform.sh?');
         }
 
         return this.variablesDef;
@@ -326,8 +315,8 @@ class Config {
      *   The application definition object.
      */
     application() {
-        if (!this.isValidPlatform()) {
-            throw new NotValidPlatformError('You are not running on Platform.sh, so the application definition is not available.');
+        if (!this.applicationDef) {
+            throw new NotValidPlatformError('No application definition is available.  Are you sure you are running on Platform.sh?');
         }
 
         return this.applicationDef;
@@ -339,8 +328,7 @@ class Config {
      * @returns {string}
      */
     get appDir() {
-        this._confirmValidPlatform('You are not running on Platform.sh, so the appDir variable are not available.');
-        return this._getValue('APP_DIR');
+        return this._buildValue('APP_DIR', 'appDir');
     }
 
     /**
@@ -349,8 +337,7 @@ class Config {
      * @returns {string}
      */
     get applicationName() {
-        this._confirmValidPlatform('applicationName');
-        return this._getValue('APPLICATION_NAME');
+        return this._buildValue('APPLICATION_NAME', 'applicationName');
     }
 
     /**
@@ -359,8 +346,7 @@ class Config {
      * @returns {string}
      */
     get project() {
-        this._confirmValidPlatform('project');
-        return this._getValue('PROJECT');
+        return this._buildValue('PROJECT', 'project');
     }
 
     /**
@@ -372,8 +358,7 @@ class Config {
      * @returns {string}
      */
     get treeId() {
-        this._confirmValidPlatform('treeId');
-        return this._getValue('TREE_ID');
+        return this._buildValue('TREE_ID', 'treeId');
     }
 
     /**
@@ -386,8 +371,7 @@ class Config {
      * @returns {string}
      */
     get projectEntropy() {
-        this._confirmValidPlatform('projectEntropy');
-        return this._getValue('PROJECT_ENTROPY');
+        return this._buildValue('PROJECT_ENTROPY', 'projectEntropy');
     }
 
     /**
@@ -396,9 +380,7 @@ class Config {
      * @returns {string}
      */
     get branch() {
-        this._confirmValidPlatform('branch');
-        this._confirmRuntime('branch');
-        return this._getValue('BRANCH');
+        return this._runtimeValue('BRANCH', 'branch');
     }
 
     /**
@@ -407,9 +389,7 @@ class Config {
      * @returns {string}
      */
     get environment() {
-        this._confirmValidPlatform('environment');
-        this._confirmRuntime('environment');
-        return this._getValue('ENVIRONMENT');
+        return this._runtimeValue('ENVIRONMENT', 'environment');
     }
 
     /**
@@ -418,9 +398,7 @@ class Config {
      * @returns {string}
      */
     get documentRoot() {
-        this._confirmValidPlatform('documentRoot');
-        this._confirmRuntime('documentRoot');
-        return this._getValue('DOCUMENT_ROOT');
+        return this._runtimeValue('DOCUMENT_ROOT', 'documentRoot');
     }
 
     /**
@@ -431,9 +409,7 @@ class Config {
      * @returns {string}
      */
     get smtpHost() {
-        this._confirmValidPlatform('smtpHost');
-        this._confirmRuntime('smtpHost');
-        return this._getValue('SMTP_HOST');
+        return this._runtimeValue('SMTP_HOST', 'smtpHost');
     }
 
     /**
@@ -442,9 +418,14 @@ class Config {
      * @returns {string}
      */
     get port() {
-        this._confirmValidPlatform('port');
-        this._confirmRuntime('port');
-        return this.environmentVariables['PORT'];
+        if (this.inBuild()) {
+            throw new BuildTimeVariableAccessError(`The "port" variable is not available during build time.`);
+        }
+        let value = this.environmentVariables['PORT'];
+        if (!value) {
+            throw new NotValidPlatformError(`The "port" variable is not defined. Are you sure you're running on Platform.sh?`);
+        }
+        return value;
     }
 
     /**
@@ -453,41 +434,54 @@ class Config {
      * @returns {string}
      */
     get socket() {
-        this._confirmValidPlatform('socket');
-        this._confirmRuntime('socket');
-        return this.environmentVariables['SOCKET'];
+        if (this.inBuild()) {
+            throw new BuildTimeVariableAccessError(`The "socket" variable is not available during build time.`);
+        }
+        let value = this.environmentVariables['SOCKET'];
+        if (!value) {
+            throw new NotValidPlatformError(`The "socket" variable is not defined. Are you sure you're running on Platform.sh?`);
+        }
+        return value;
     }
 
     /**
-     * Internal utility to simplify validating that a request is made on a valid Platform.
+     * Returns a build-safe variable's value if defined, or throws an error.
      *
      * @param {string} property
-     *   The variable that will be accessed if the environment is valid, or is missing otherwise.
-     * @returns {boolean}
-     *   True if running on a valid Platform, false otherwise.
+     *   The name of the environment variable, without prefix.
+     * @param {string} humanName
+     *   The human-readable name of the property to be used in error messages.
+     * @return {string}
+     *   The variable's value.
      * @private
      */
-    _confirmValidPlatform(property) {
-        if (!this.isValidPlatform()) {
-            throw new NotValidPlatformError(`You are not running on Platform.sh, so the "${property}" variable are not available.`);
+    _buildValue(property, humanName) {
+        let value = this._getValue(property);
+        if (!value) {
+            throw new NotValidPlatformError(`The "${humanName}" variable is not defined. Are you sure you're running on Platform.sh?`);
         }
-        return true;
+        return value;
     }
 
     /**
-     * Internal utility to simplify validating that a request is made during runtime.
+     * Returns a runtime-only variable's value if defined, or throws an error.
      *
      * @param {string} property
-     *   The variable that will be accessed if the environment is at runtime, or is missing otherwise.
-     * @returns {boolean}
-     *   True if running in runtime, false otherwise.
+     *   The name of the environment variable, without prefix.
+     * @param {string} humanName
+     *   The human-readable name of the property to be used in error messages.
+     * @return {string}
+     *   The variable's value.
      * @private
-     */
-    _confirmRuntime(property) {
-        if (!this.inRuntime()) {
-            throw new BuildTimeVariableAccessError(`The "${property}" variable is not available during build time.`);
+     */    _runtimeValue(property, humanName) {
+        if (this.inBuild()) {
+            throw new BuildTimeVariableAccessError(`The "${humanName}" variable is not available during build time.`);
         }
-        return true;
+        let value = this._getValue(property);
+        if (!value) {
+            throw new NotValidPlatformError(`The "${humanName}" variable is not defined. Are you sure you're running on Platform.sh?`);
+        }
+        return value;
     }
 
     /**

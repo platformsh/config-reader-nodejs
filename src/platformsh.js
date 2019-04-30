@@ -298,9 +298,6 @@ class Config {
      *   The full variables definition.
      */
     variables() {
-        if (!this.variablesDef) {
-            throw new NotValidPlatformError('No variables are defined.  Are you sure you are running on Platform.sh?');
-        }
 
         return this.variablesDef;
     }

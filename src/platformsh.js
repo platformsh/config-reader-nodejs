@@ -526,6 +526,17 @@ function mongodbFormatter(credentials) {
 }
 
 /**
+ * Returns a connection string appropriate for Puppeteer and headless Chrome.
+ * @param cretentials
+ *   A chrome-headless credentials object
+ * @returns {string}
+ *   A connection string to pass to puppeteer.connect().
+ */
+function puppeteerFormatter(credentials) {
+    return `http://${credentials["ip"]}:${credentials["port"]}`;
+}
+
+/**
  * Creates a new Config instance that represents the current environment.
  *
  * @returns {Config}

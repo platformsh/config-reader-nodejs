@@ -52,6 +52,7 @@ class Config {
 
         this.registerFormatter('solr-node', nodeSolrFormatter);
         this.registerFormatter('mongodb', mongodbFormatter);
+        this.registerFormatter('puppeteer', puppeteerFormatter);
 
         let variables = this._getValue('VARIABLES');
         if (variables) {

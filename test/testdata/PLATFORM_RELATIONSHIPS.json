@@ -52,5 +52,18 @@
          "hostname" : "dg3c6xro44gl5tuxqbqf5flvhu.solr.service._.eu-3.platformsh.site",
          "scheme" : "solr"
       }
+   ],
+   "headless": [
+      {
+          "service": "headless",
+          "ip": "169.254.16.215",
+          "hostname": "vjteswvo72bpyb33rgijkpooja.headless.service._.eu-3.platformsh.site",
+          "cluster": "moqwtrvgc63mo-pr-5-kehpj4q",
+          "host": "headless.internal",
+          "rel": "http",
+          "scheme": "http",
+          "type": "chrome-headless:73",
+          "port": 9222
+      }
    ]
 }

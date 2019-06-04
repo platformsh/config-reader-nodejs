@@ -345,7 +345,17 @@ describe("Config tests", () => {
             });
         });
 
+        it('formatts a puppeteer connection', () => {
+            let c = new psh.Config(mockEnvironmentRuntime);
 
-    });
+            let formatted = c.formattedCredentials('headless', 'puppeteer')
+
+            assert.deepEqual(formatted, {
+                host: 'headless.internal',
+                port: 9222,
+                ip: "169.254.16.215"
+            });
+        });
+     });
 
 });

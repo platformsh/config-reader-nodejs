@@ -52,6 +52,7 @@ class Config {
 
         this.registerFormatter('solr-node', nodeSolrFormatter);
         this.registerFormatter('mongodb', mongodbFormatter);
+        this.registerFormatter('puppeteer', puppeteerFormatter);
 
         let variables = this._getValue('VARIABLES');
         if (variables) {
@@ -523,6 +524,17 @@ function nodeSolrFormatter(credentials) {
  */
 function mongodbFormatter(credentials) {
     return `mongodb://${credentials["username"]}:${credentials["password"]}@${credentials["host"]}:${credentials["port"]}/${credentials["path"]}`;
+}
+
+/**
+ * Returns a connection string appropriate for Puppeteer and headless Chrome.
+ * @param cretentials
+ *   A chrome-headless credentials object
+ * @returns {string}
+ *   A connection string to pass to puppeteer.connect().
+ */
+function puppeteerFormatter(credentials) {
+    return `http://${credentials["ip"]}:${credentials["port"]}`;
 }
 
 /**

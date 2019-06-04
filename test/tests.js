@@ -345,7 +345,13 @@ describe("Config tests", () => {
             });
         });
 
+        it('formatts a puppeteer connection', () => {
+            let c = new psh.Config(mockEnvironmentRuntime);
 
-    });
+            let formatted = c.formattedCredentials('headless', 'puppeteer')
+
+            assert.equal(formatted, 'http://169.254.16.215:9222')
+        });
+     });
 
 });

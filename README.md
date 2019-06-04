@@ -136,7 +136,7 @@ config.registerFormatter("my_service", formatMyService);
 
 // Then call this method to get the formatted version
 
-formatted = config.FormattedCredentials("database", "my_service");
+formatted = config.formattedCredentials("database", "my_service");
 ```
 
 The first parameter is the name of a relationship defined in `.platform.app.yaml`.  The second is a formatter that was previously registered with `registerFormatter()`.  If either the service or formatter is missing an exception will be thrown.  The type of `formatted` will depend on the formatter function and can be safely passed directly to the client library.

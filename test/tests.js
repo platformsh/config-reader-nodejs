@@ -350,11 +350,7 @@ describe("Config tests", () => {
 
             let formatted = c.formattedCredentials('headless', 'puppeteer')
 
-            assert.deepEqual(formatted, {
-                host: 'headless.internal',
-                port: 9222,
-                ip: "169.254.16.215"
-            });
+            assert.equal(formatted, 'http://169.254.16.215:9222')
         });
      });
 

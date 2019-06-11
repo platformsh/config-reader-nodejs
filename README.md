@@ -29,7 +29,7 @@ const connection = await mysql.createConnection({
     port: credentials.port,
     user: credentials.username,
     password: credentials.password,
-    database: credentials.path,
+    database: credentials.path
 });
 
 // Do stuff with connection.

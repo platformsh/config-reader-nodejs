@@ -166,6 +166,14 @@ describe("Config tests", () => {
             });
         });
 
+        it('gets the primary route', () => {
+            let c = new psh.Config(mockEnvironmentRuntime);
+
+            let route = c.getPrimaryRoute();
+
+            assert.equal(route['original_url'], 'https://www.{default}/');
+        });
+
         it('gets a route by id', () => {
             let c = new psh.Config(mockEnvironmentRuntime);
 

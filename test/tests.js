@@ -172,6 +172,40 @@ describe("Config tests", () => {
             let route = c.getPrimaryRoute();
 
             assert.equal(route['original_url'], 'https://www.{default}/');
+            assert.equal(route['primary'], true);
+        });
+
+        it('returns all upstream routes', () => {
+            let c = new psh.Config(mockEnvironmentRuntime);
+
+            let routes = c.getUpstreamRoutes();
+
+            assert.equal(3, Object.keys(routes).length);
+            assert.equal(routes['https://www.master-7rqtwti-gcpjkefjk4wc2.us-2.platformsh.site/']['original_url'], 'https://www.{default}/');
+        });
+
+        it('returns all upstream routes for a specific app', () => {
+            let c = new psh.Config(mockEnvironmentRuntime);
+
+            let routes = c.getUpstreamRoutes('app');
+
+            assert.equal(2, Object.keys(routes).length);
+            assert.equal(routes['https://www.master-7rqtwti-gcpjkefjk4wc2.us-2.platformsh.site/']['original_url'], 'https://www.{default}/');
+        });
+
+        it('returns all upstream routes for a specific app on dedicated', () => {
+            let env = mockEnvironmentRuntime;
+            // Simulate a Dedicated-style upstream name.
+            let routeData = loadJsonFile('PLATFORM_ROUTES');
+            routeData['https://www.master-7rqtwti-gcpjkefjk4wc2.us-2.platformsh.site/']['upstream'] = 'app:http';
+            env['PLATFORM_ROUTES'] = encode(routeData);
+
+            let c = new psh.Config(env);
+
+            let routes = c.getUpstreamRoutes('app');
+
+            assert.equal(2, Object.keys(routes).length);
+            assert.equal(routes['https://www.master-7rqtwti-gcpjkefjk4wc2.us-2.platformsh.site/']['original_url'], 'https://www.{default}/');
         });
 
         it('gets a route by id', () => {

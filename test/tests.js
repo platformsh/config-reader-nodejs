@@ -155,7 +155,7 @@ describe("Config tests", () => {
             let routes = c.routes();
 
             assert.ok(typeof routes == 'object');
-            assert.equal(Object.keys(routes).length, 4);
+            assert.equal(Object.keys(routes).length, 6);
         });
 
         it('throws when loading routes in build time', () => {
@@ -201,7 +201,7 @@ describe("Config tests", () => {
             let routes = c.routes();
 
             assert.ok(typeof routes == 'object');
-            assert.equal(Object.keys(routes).length, 4);
+            assert.equal(Object.keys(routes).length, 6);
         });
     });
 

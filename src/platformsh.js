@@ -199,6 +199,64 @@ class Config {
     }
 
     /**
+     * Returns the primary route.
+     *
+     * The primary route is the one marked primary in `routes.yaml`, or else
+     * the first non-redirect route in that file if none are marked.
+     *
+     * @return {object}
+     *   The route definition.  The generated URL of the route is added as a "url" key.
+     */
+    getPrimaryRoute() {
+        // eslint-disable-next-line no-unused-vars
+        for (const [url, route] of Object.entries(this.routes())) {
+            if (route.primary === true) {
+                return route;
+            }
+        }
+
+        throw new Error(`No primary route found. This isn't supposed to happen.`);
+    }
+
+    /**
+     * Returns just those routes that point to a valid upstream.
+     *
+     * This method is similar to routes(), but filters out redirect routes that are rarely
+     * useful for app configuration.  If desired it can also filter to just those routes
+     * whose upstream is a given application name.  To retrieve routes that point to the
+     * current application where the code is being run, use:
+     *
+     * routes =  config.getUpstreamRoutes(config.applicationName);
+     *
+     * @param {string|null} appName
+     *   The name of the upstream app on which to filter, if any.
+     * @return {object}
+     *   An object map of route definitions.
+     */
+    getUpstreamRoutes(appName = null) {
+        // Because routes is an object/dictionary, we can't just filter it directly.
+        // Verbose way it is.
+
+        const routes = this.routes();
+        const filter = route => {
+            return route.type === 'upstream'
+                // On Dedicated, the upstream name sometimes is `app:http` instead of just `app`.
+                // If no name is specified then don't bother checking.
+                && (!appName || appName === route.upstream.split(':')[0]);
+        };
+
+        let ret = {};
+
+        Object.keys(routes).forEach(function(key) {
+            if (filter(routes[key])) {
+                ret[key] = routes[key];
+            }
+        });
+
+        return ret;
+    }
+
+    /**
      * Returns a single route definition.
      *
      * Note: If no route ID was specified in routes.yaml then it will not be possible

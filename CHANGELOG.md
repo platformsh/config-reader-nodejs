@@ -1,6 +1,6 @@
 # Changelog
 
-## [2.3.1] - 2019-09-19
+## [2.3.1] - 2019-11-04
 
 ### Added
 
@@ -16,7 +16,7 @@
 ### Added
 
 * `getPrimaryRoute` method for accessing routes marked "primary" in `routes.yaml`.
-* `getUpstreamRoutes` method returns an  object map that includes only those routes that point to a valid upstream.
+* `getUpstreamRoutes` method returns an object map that includes only those routes that point to a valid upstream.
 
 ## [2.2.5] - 2019-06-04
 

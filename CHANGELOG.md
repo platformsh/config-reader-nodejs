@@ -9,7 +9,7 @@
 
 ### Changed
 
-* Deprecates `onEnterprise` method - which is made to wrap around the added `onDedicated` method. `onEnterprise` **will be removed** in a future release, so update your projects to use `onDedicated` instead as soon as possible.
+* Deprecates `onEnterprise` method - which is for now made to wrap around the added `onDedicated` method. `onEnterprise` **will be removed** in a future release, so update your projects to use `onDedicated` instead as soon as possible.
 
 ## [2.3.0] - 2019-09-19
 

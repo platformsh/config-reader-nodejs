@@ -92,41 +92,41 @@ describe("Config tests", () => {
         });
     });
 
-    describe("onEnterprise() tests", () => {
+    describe("onDedicated() tests", () => {
 
-        it('Returns true in enterprise environment', () => {
-            let mockEnvironmentEnterprise = deepClone(mockEnvironmentRuntime);
-            mockEnvironmentEnterprise['PLATFORM_MODE'] = 'enterprise';
+        it('Returns true in Dedicated environment', () => {
+            let mockEnvironmentDedicated = deepClone(mockEnvironmentRuntime);
+            mockEnvironmentDedicated['PLATFORM_MODE'] = 'enterprise';
 
-            let c = new psh.Config(mockEnvironmentEnterprise);
+            let c = new psh.Config(mockEnvironmentDedicated);
 
-            assert.ok(c.onEnterprise());
+            assert.ok(c.onDedicated());
         });
 
         it('Returns false in standard environment', () => {
             let c = new psh.Config(mockEnvironmentRuntime);
 
-            assert.ok(!c.onEnterprise());
+            assert.ok(!c.onDedicated());
         });
     });
 
     describe("onProduction() tests", () => {
 
-        it('Returns true on enterprise production', () => {
-            let mockEnvironmentEnterprise = deepClone(mockEnvironmentRuntime);
-            mockEnvironmentEnterprise['PLATFORM_MODE'] = 'enterprise';
-            mockEnvironmentEnterprise['PLATFORM_BRANCH'] = 'production';
+        it('Returns true on Dedicated production', () => {
+            let mockEnvironmentDedicated = deepClone(mockEnvironmentRuntime);
+            mockEnvironmentDedicated['PLATFORM_MODE'] = 'enterprise';
+            mockEnvironmentDedicated['PLATFORM_BRANCH'] = 'production';
 
-            let c = new psh.Config(mockEnvironmentEnterprise);
+            let c = new psh.Config(mockEnvironmentDedicated);
 
             assert.ok(c.onProduction());
         });
 
-        it('Returns false on enterprise staging', () => {
-            let mockEnvironmentEnterprise = deepClone(mockEnvironmentRuntime);
-            mockEnvironmentEnterprise['PLATFORM_MODE'] = 'enterprise';
+        it('Returns false on Dedicated staging', () => {
+            let mockEnvironmentDedicated = deepClone(mockEnvironmentRuntime);
+            mockEnvironmentDedicated['PLATFORM_MODE'] = 'enterprise';
 
-            let c = new psh.Config(mockEnvironmentEnterprise);
+            let c = new psh.Config(mockEnvironmentDedicated);
 
             assert.ok(!c.onProduction());
         });

@@ -148,12 +148,31 @@ class Config {
     }
 
     /**
-     * Determines if the current environment is a Platform.sh Enterprise environment.
+     * Determines if the current environment is a Platform.sh Dedicated environment.
+     *
+     * @deprecated
+     *
+     * The Platform.sh "Enterprise" will soon be referred to exclusively as
+     * "Dedicated". the `onEnterprise` method remains available for now, but it
+     * will be removed in a future version of this library.
+     *
+     * It is recommended that you update your projects to use `onDedicated` as
+     * soon as possible.
      *
      * @return {boolean}
-     *   True on an Enterprise environment, False otherwise.
+     *   True on an Dedicated environment, False otherwise.
      */
     onEnterprise() {
+        return this.onDedicated();
+    }
+
+    /**
+     * Determines if the current environment is a Platform.sh Dedicated environment.
+     *
+     * @return {boolean}
+     *   True on an Dedicated environment, False otherwise.
+     */
+    onDedicated() {
         return this.isValidPlatform() && this._getValue('MODE') === 'enterprise';
     }
 
@@ -613,4 +632,3 @@ module.exports = {
 if (process.env.NODE_ENV === 'test') {
     module.exports.Config = Config;
 }
-

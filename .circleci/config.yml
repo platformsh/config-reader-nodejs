@@ -15,11 +15,12 @@ workflows:
           requires:
             - build
           filters:
+          # Filters match ANY condition below. Specifying multiple filters does
+          # not specifically cause the workflow to run only when ALL are met.
             tags:
               only: /[0-9]+(\.[0-9]+)*/
             branches:
-              only:
-                - master
+              ignore: /.*/
 
 jobs:
   build:

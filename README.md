@@ -72,6 +72,26 @@ config.onProduction();
 >
 > It is recommended that you update your projects to use `onDedicated` as soon as possible, as `onEnterprise` will be removed in a future version of this library.
 
+
+### Get Primary Route
+```js
+config.getPrimaryRoute()
+```
+Will return an object of the primary route according to [`.platform/routes.yaml`](https://docs.platform.sh/configuration/routes.html). 
+
+#### Example
+```js
+{
+	primary: true
+	id: null
+	attributes: {}
+	type: "upstream"
+	upstream: "site1"
+	original_url: "https://site1.{default}/"
+	url: "https://site1.test-t6dnbai-abcdef1234567.us-2.platformsh.site/"
+}
+```
+
 ### Read environment variables
 
 The following magic properties return the corresponding environment variable value.  See the [Platform.sh documentation](https://docs.platform.sh/development/variables.html) for a description of each.

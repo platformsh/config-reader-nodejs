@@ -22,7 +22,7 @@ describe("Config tests", () => {
     let mockEnvironmentRuntime = [];
 
     before(() => {
-        let env = loadJsonFile('ENV');
+        const env = loadJsonFile('ENV');
 
         ['PLATFORM_APPLICATION', 'PLATFORM_VARIABLES'].forEach((item) => {
             env[item] = encode(loadJsonFile(item));
@@ -34,28 +34,27 @@ describe("Config tests", () => {
             env[item] = encode(loadJsonFile(item));
         });
 
-        let envRuntime = loadJsonFile('ENV_runtime');
-        env = {...env, ...envRuntime};
+        const envRuntime = loadJsonFile('ENV_runtime');
 
-        mockEnvironmentRuntime = env;
+        mockEnvironmentRuntime = {...env, ...envRuntime};
     });
 
     describe("isValidPlatform() tests", () => {
 
         it('Returns false when not on Platform.sh', () => {
-            let c = new psh.Config();
+            const c = new psh.Config();
 
             assert.ok(!c.isValidPlatform());
         });
 
         it('Returns true when on Platform.sh, build time', () => {
-            let c = new psh.Config(mockEnvironmentBuild);
+            const c = new psh.Config(mockEnvironmentBuild);
 
             assert.ok(c.isValidPlatform());
         });
 
         it('Returns true when on Platform.sh, runtime', () => {
-            let c = new psh.Config(mockEnvironmentRuntime);
+            const c = new psh.Config(mockEnvironmentRuntime);
 
             assert.ok(c.isValidPlatform());
         });
@@ -64,13 +63,13 @@ describe("Config tests", () => {
     describe("inBuid() tests", () => {
 
         it('Returns true in build environment', () => {
-            let c = new psh.Config(mockEnvironmentBuild);
+            const c = new psh.Config(mockEnvironmentBuild);
 
             assert.ok(c.inBuild())
         });
 
         it('Returns false in runtime environment', () => {
-            let c = new psh.Config(mockEnvironmentRuntime);
+            const c = new psh.Config(mockEnvironmentRuntime);
 
             assert.ok(!c.inBuild())
         });
@@ -80,13 +79,13 @@ describe("Config tests", () => {
     describe("inRuntime() tests", () => {
 
         it('Returns true in runtime environment', () => {
-            let c = new psh.Config(mockEnvironmentRuntime);
+            const c = new psh.Config(mockEnvironmentRuntime);
 
             assert.ok(c.inRuntime());
         });
 
         it('Returns false in build environment', () => {
-            let c = new psh.Config(mockEnvironmentBuild);
+            const c = new psh.Config(mockEnvironmentBuild);
 
             assert.ok(!c.inRuntime());
         });
@@ -95,16 +94,16 @@ describe("Config tests", () => {
     describe("onDedicated() tests", () => {
 
         it('Returns true in Dedicated environment', () => {
-            let mockEnvironmentDedicated = deepClone(mockEnvironmentRuntime);
+            const mockEnvironmentDedicated = deepClone(mockEnvironmentRuntime);
             mockEnvironmentDedicated['PLATFORM_MODE'] = 'enterprise';
 
-            let c = new psh.Config(mockEnvironmentDedicated);
+            const c = new psh.Config(mockEnvironmentDedicated);
 
             assert.ok(c.onDedicated());
         });
 
         it('Returns false in standard environment', () => {
-            let c = new psh.Config(mockEnvironmentRuntime);
+            const c = new psh.Config(mockEnvironmentRuntime);
 
             assert.ok(!c.onDedicated());
         });
@@ -113,35 +112,35 @@ describe("Config tests", () => {
     describe("onProduction() tests", () => {
 
         it('Returns true on Dedicated production', () => {
-            let mockEnvironmentDedicated = deepClone(mockEnvironmentRuntime);
+            const mockEnvironmentDedicated = deepClone(mockEnvironmentRuntime);
             mockEnvironmentDedicated['PLATFORM_MODE'] = 'enterprise';
             mockEnvironmentDedicated['PLATFORM_BRANCH'] = 'production';
 
-            let c = new psh.Config(mockEnvironmentDedicated);
+            const c = new psh.Config(mockEnvironmentDedicated);
 
             assert.ok(c.onProduction());
         });
 
         it('Returns false on Dedicated staging', () => {
-            let mockEnvironmentDedicated = deepClone(mockEnvironmentRuntime);
+            const mockEnvironmentDedicated = deepClone(mockEnvironmentRuntime);
             mockEnvironmentDedicated['PLATFORM_MODE'] = 'enterprise';
 
-            let c = new psh.Config(mockEnvironmentDedicated);
+            const c = new psh.Config(mockEnvironmentDedicated);
 
             assert.ok(!c.onProduction());
         });
 
         it('Returns true on standard master', () => {
-            let mockEnvironmentProduction = deepClone(mockEnvironmentRuntime);
+            const mockEnvironmentProduction = deepClone(mockEnvironmentRuntime);
             mockEnvironmentProduction['PLATFORM_BRANCH'] = 'master';
 
-            let c = new psh.Config(mockEnvironmentProduction);
+            const c = new psh.Config(mockEnvironmentProduction);
 
             assert.ok(c.onProduction());
         });
 
         it('Returns false on standard dev', () => {
-            let c = new psh.Config(mockEnvironmentRuntime);
+            const c = new psh.Config(mockEnvironmentRuntime);
 
             assert.ok(!c.onProduction());
         });
@@ -150,74 +149,74 @@ describe("Config tests", () => {
     describe("Route tests", () => {
 
         it('loads all routes in runtime', () => {
-            let c = new psh.Config(mockEnvironmentRuntime);
+            const c = new psh.Config(mockEnvironmentRuntime);
 
-            let routes = c.routes();
+            const routes = c.routes();
 
             assert.ok(typeof routes == 'object');
             assert.equal(Object.keys(routes).length, 6);
         });
 
         it('throws when loading routes in build time', () => {
-            let c = new psh.Config(mockEnvironmentBuild);
+            const c = new psh.Config(mockEnvironmentBuild);
 
             assert.throws(() => {
-                let routes = c.routes();
+                const routes = c.routes();
             });
         });
 
         it('gets the primary route', () => {
-            let c = new psh.Config(mockEnvironmentRuntime);
+            const c = new psh.Config(mockEnvironmentRuntime);
 
-            let route = c.getPrimaryRoute();
+            const route = c.getPrimaryRoute();
 
             assert.equal(route['original_url'], 'https://www.{default}/');
             assert.equal(route['primary'], true);
         });
 
         it('returns all upstream routes', () => {
-            let c = new psh.Config(mockEnvironmentRuntime);
+            const c = new psh.Config(mockEnvironmentRuntime);
 
-            let routes = c.getUpstreamRoutes();
+            const routes = c.getUpstreamRoutes();
 
             assert.equal(3, Object.keys(routes).length);
             assert.equal(routes['https://www.master-7rqtwti-gcpjkefjk4wc2.us-2.platformsh.site/']['original_url'], 'https://www.{default}/');
         });
 
         it('returns all upstream routes for a specific app', () => {
-            let c = new psh.Config(mockEnvironmentRuntime);
+            const c = new psh.Config(mockEnvironmentRuntime);
 
-            let routes = c.getUpstreamRoutes('app');
+            const routes = c.getUpstreamRoutes('app');
 
             assert.equal(2, Object.keys(routes).length);
             assert.equal(routes['https://www.master-7rqtwti-gcpjkefjk4wc2.us-2.platformsh.site/']['original_url'], 'https://www.{default}/');
         });
 
         it('returns all upstream routes for a specific app on dedicated', () => {
-            let env = mockEnvironmentRuntime;
+            const env = mockEnvironmentRuntime;
             // Simulate a Dedicated-style upstream name.
-            let routeData = loadJsonFile('PLATFORM_ROUTES');
+            const routeData = loadJsonFile('PLATFORM_ROUTES');
             routeData['https://www.master-7rqtwti-gcpjkefjk4wc2.us-2.platformsh.site/']['upstream'] = 'app:http';
             env['PLATFORM_ROUTES'] = encode(routeData);
 
-            let c = new psh.Config(env);
+            const c = new psh.Config(env);
 
-            let routes = c.getUpstreamRoutes('app');
+            const routes = c.getUpstreamRoutes('app');
 
             assert.equal(2, Object.keys(routes).length);
             assert.equal(routes['https://www.master-7rqtwti-gcpjkefjk4wc2.us-2.platformsh.site/']['original_url'], 'https://www.{default}/');
         });
 
         it('gets a route by id', () => {
-            let c = new psh.Config(mockEnvironmentRuntime);
+            const c = new psh.Config(mockEnvironmentRuntime);
 
-            let route = c.getRoute('main');
+            const route = c.getRoute('main');
 
             assert.equal(route['original_url'], 'https://www.{default}/');
         });
 
         it('throws on a non-existant route id', () => {
-            let c = new psh.Config(mockEnvironmentRuntime);
+            const c = new psh.Config(mockEnvironmentRuntime);
 
             assert.throws(() => {
                 c.getRoute('missing');
@@ -226,13 +225,13 @@ describe("Config tests", () => {
 
 
         it('loads all routes in local', () => {
-            let env = deepClone(mockEnvironmentRuntime);
+            const env = deepClone(mockEnvironmentRuntime);
             delete env['PLATFORM_APPLICATION_NAME'];
             delete env['PLATFORM_ENVIRONMENT'];
             delete env['PLATFORM_BRANCH'];
-             let c = new psh.Config(env);
+             const c = new psh.Config(env);
 
-            let routes = c.routes();
+            const routes = c.routes();
 
             assert.ok(typeof routes == 'object');
             assert.equal(Object.keys(routes).length, 6);
@@ -242,27 +241,27 @@ describe("Config tests", () => {
     describe("Relationship tests", () => {
 
         it('returns an existing relationship by name', () => {
-            let c = new psh.Config(mockEnvironmentRuntime);
+            const c = new psh.Config(mockEnvironmentRuntime);
 
-            let creds = c.credentials('database');
+            const creds = c.credentials('database');
 
             assert.equal(creds['scheme'], 'mysql');
             assert.equal(creds['type'], 'mysql:10.2');
         });
 
         it('throws an exception for a missing relationship name', () => {
-            let c = new psh.Config(mockEnvironmentRuntime);
+            const c = new psh.Config(mockEnvironmentRuntime);
 
             assert.throws(() => {
-                let creds = c.getRoute('missing');
+                const creds = c.getRoute('missing');
             });
         });
 
         it('throws an exception for a missing relationship index', () => {
-            let c = new psh.Config(mockEnvironmentRuntime);
+            const c = new psh.Config(mockEnvironmentRuntime);
 
             assert.throws(() => {
-                let creds = c.getRoute('database', 3);
+                const creds = c.getRoute('database', 3);
             });
         });
     });
@@ -270,13 +269,13 @@ describe("Config tests", () => {
     describe('hasRelationship tests', () => {
 
         if('returns true for an existing relationship', () => {
-            let c = new psh.Config(mockEnvironmentRuntime);
+            const c = new psh.Config(mockEnvironmentRuntime);
 
             assert.ok(c.hasRelationship('database'));
         });
 
         if('returns false for an missing relationship', () => {
-            let c = new psh.Config(mockEnvironmentRuntime);
+            const c = new psh.Config(mockEnvironmentRuntime);
 
             assert.ok(c.hasRelationship('missing'));
         });
@@ -285,25 +284,25 @@ describe("Config tests", () => {
     describe("Variables tests", () => {
 
         it('returns an existing variable', () => {
-            let c = new psh.Config(mockEnvironmentRuntime);
+            const c = new psh.Config(mockEnvironmentRuntime);
 
-            let value = c.variable('somevar');
+            const value = c.variable('somevar');
 
             assert.equal(value, 'someval');
         });
 
         it('returns a default value when the variable doesn\'t exist', () => {
-            let c = new psh.Config(mockEnvironmentRuntime);
+            const c = new psh.Config(mockEnvironmentRuntime);
 
-            let value = c.variable('missing', 'default-val');
+            const value = c.variable('missing', 'default-val');
 
             assert.equal(value, 'default-val');
         });
 
         it('returns all variables when on Platform', () => {
-            let c = new psh.Config(mockEnvironmentRuntime);
+            const c = new psh.Config(mockEnvironmentRuntime);
 
-            let value = c.variables();
+            const value = c.variables();
 
             assert.equal(value['somevar'], 'someval');
         });
@@ -312,9 +311,9 @@ describe("Config tests", () => {
     describe("Application tests", () => {
 
         it('returns the application array on Platform.sh', () => {
-            let c = new psh.Config(mockEnvironmentRuntime);
+            const c = new psh.Config(mockEnvironmentRuntime);
 
-            let app = c.application();
+            const app = c.application();
 
             assert.equal(app['type'], 'php:7.2');
         });
@@ -324,7 +323,7 @@ describe("Config tests", () => {
     describe("Raw property tests", () => {
 
         it('returns the correct value for raw properties', () => {
-            let c = new psh.Config(mockEnvironmentRuntime);
+            const c = new psh.Config(mockEnvironmentRuntime);
 
             assert.equal(c.appDir, '/app');
             assert.equal(c.applicationName, 'app');
@@ -341,10 +340,10 @@ describe("Config tests", () => {
         });
 
         it('throws when a runtime property is accessed at build time', () => {
-            let c = new psh.Config(mockEnvironmentBuild);
+            const c = new psh.Config(mockEnvironmentBuild);
 
             assert.throws(() => {
-                let branch = c.branch;
+                const branch = c.branch;
             });
         });
     });
@@ -352,7 +351,7 @@ describe("Config tests", () => {
     describe('Credential formatter tests', () => {
 
         it('throws when a formatter is not found', () => {
-            let c = new psh.Config(mockEnvironmentRuntime);
+            const c = new psh.Config(mockEnvironmentRuntime);
 
             assert.throws(() => {
                 c.formattedCredentials('database', 'not-existing');
@@ -360,7 +359,7 @@ describe("Config tests", () => {
         });
 
         it('calls a registered formatter', () => {
-            let c = new psh.Config(mockEnvironmentRuntime);
+            const c = new psh.Config(mockEnvironmentRuntime);
             let called = false;
 
             c.registerFormatter('test', (credentials) => {
@@ -368,16 +367,16 @@ describe("Config tests", () => {
                 return 'stuff';
             });
 
-            let formatted = c.formattedCredentials('database', 'test');
+            const formatted = c.formattedCredentials('database', 'test');
 
             assert.ok(called);
             assert.equal(formatted, 'stuff');
         });
 
         it('formats a solr-node connection', () => {
-            let c = new psh.Config(mockEnvironmentRuntime);
+            const c = new psh.Config(mockEnvironmentRuntime);
 
-            let formatted = c.formattedCredentials('solr', 'solr-node');
+            const formatted = c.formattedCredentials('solr', 'solr-node');
 
             assert.deepEqual(formatted, {
                 host: 'solr.internal',
@@ -388,9 +387,9 @@ describe("Config tests", () => {
         });
 
         it('formatts a puppeteer connection', () => {
-            let c = new psh.Config(mockEnvironmentRuntime);
+            const c = new psh.Config(mockEnvironmentRuntime);
 
-            let formatted = c.formattedCredentials('headless', 'puppeteer')
+            const formatted = c.formattedCredentials('headless', 'puppeteer')
 
             assert.equal(formatted, 'http://169.254.16.215:9222')
         });

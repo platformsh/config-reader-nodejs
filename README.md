@@ -106,6 +106,13 @@ config.socket;
 config.port;
 ```
 
+By default, Platform.sh environment variables are prefixed with `PLATFORM_`. In some cases, you might need to change this default in order to have access to environment variables at build time (like with [create-react-app](https://create-react-app.dev/docs/adding-custom-environment-variables/)).
+
+You can do this like so:
+```js
+const config = require("platformsh-config").config({ varPrefix: "MY_PREFIX_" });
+```
+
 ### Reading service credentials
 
 [Platform.sh services](https://docs.platform.sh/configuration/services.html) are defined in a `services.yaml` file, and exposed to an application by listing a `relationship` to that service in the application's `.platform.app.yaml` file.  User, password, host, etc. information is then exposed to the running application in the `PLATFORM_RELATIONSHIPS` environment variable, which is a base64-encoded JSON string.  The following method allows easier access to credential information than decoding the environment variable yourself.

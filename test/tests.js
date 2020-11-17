@@ -306,6 +306,16 @@ describe("Config tests", () => {
 
             assert.equal(value['somevar'], 'someval');
         });
+
+        it('return a variable with a custom prefix', () => {
+            const c = new psh.Config(mockEnvironmentRuntime, "CUSTOM_PREFIX_");
+
+            const withCustomPrefix = c._getValue("variable_with_custom_prefix");
+            const hasNoCustomPrefix = c._getValue("somevar");
+
+            assert.equal(withCustomPrefix, "with custom prefix");
+            assert.equal(hasNoCustomPrefix, null);
+        });
     });
 
     describe("Application tests", () => {

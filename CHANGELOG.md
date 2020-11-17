@@ -1,5 +1,11 @@
 # Changelog
 
+## [2.4.0] - 2020-11-17
+
+### Added
+
+* `config` method can now get an object `{ varPrefix: string }` to specify a different environment variables prefix.
+
 ## [2.3.1] - 2019-11-04
 
 ### Added

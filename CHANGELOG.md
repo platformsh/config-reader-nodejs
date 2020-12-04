@@ -1,5 +1,11 @@
 # Changelog
 
+## [2.3.2] - 2020-12-04
+
+## Added
+
+* `engines` key added to `package.json`, specifying minimum Node.js version of 10.0.0.
+
 ## [2.3.1] - 2019-11-04
 
 ### Added

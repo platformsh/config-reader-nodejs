@@ -3,8 +3,8 @@
   "version": "2.3.2",
   "description": "Helper for running nodejs applications on Platform.sh",
   "main": "lib/platformsh.js",
-  "engines": { 
-    "node": ">=10.0.0" 
+  "engines": {
+    "node": ">=10.0.0"
   },
   "keywords": [
     "platformsh",
@@ -28,7 +28,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/platformsh/config-reader-nodejs.git"
+    "url": "https://github.com/platformsh/config-reader-nodejs.git"
   },
   "homepage": "https://github.com/platformsh/config-reader-nodejs#readme",
   "devDependencies": {

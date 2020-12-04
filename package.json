@@ -3,6 +3,9 @@
   "version": "2.3.1",
   "description": "Helper for running nodejs applications on Platform.sh",
   "main": "lib/platformsh.js",
+  "engines": { 
+    "node": ">=10.0.0" 
+  },
   "keywords": [
     "platformsh",
     "paas"

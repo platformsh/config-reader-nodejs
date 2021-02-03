@@ -1,5 +1,7 @@
 # Platform.sh Config Reader (Node.js)
 
+![Quality Assurance](https://github.com/platformsh/config-reader-nodejs/workflows/Quality%20Assurance/badge.svg)
+
 This library provides a streamlined and easy to use way to interact with a Platform.sh environment.  It offers utility methods to access routes and relationships more cleanly than reading the raw environment variables yourself.
 
 This library requires Node.js 10 or later.

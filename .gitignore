@@ -11,4 +11,3 @@ node_modules
 lib
 
 package-lock.json
-.github/workflows/npm-publish.yaml

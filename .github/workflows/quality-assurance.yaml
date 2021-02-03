@@ -6,7 +6,7 @@ on:
 
 jobs:
     build:
-        name: [Build/test] Node.js ${{ matrix.nodejs }}
+        name: '[Build/test] Node.js ${{ matrix.nodejs }}'
         runs-on: ubuntu-latest
         strategy:
             matrix:

@@ -1,0 +1,21 @@
+---
+name: Quality Assurance
+on:
+    push: ~
+    pull_request: ~
+
+jobs:
+    build:
+        name: '[Build/test] Node.js ${{ matrix.nodejs }}'
+        runs-on: ubuntu-latest
+        strategy:
+            matrix:
+                nodejs: [ '10', '12', '14' ]
+        steps: 
+            - uses: actions/checkout@v2
+            - uses: actions/setup-node@v1
+              with:
+                  node-version: ${{ matrix.nodejs }}
+            - run: npm install
+            - run: npm run build --if-present
+            - run: npm test

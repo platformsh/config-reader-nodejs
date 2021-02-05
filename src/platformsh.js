@@ -24,9 +24,9 @@ function decode(value) {
  */
 class Config {
 
-    constructor(env = null, prefix = 'PLATFORM_') {
+    constructor(env = null, varPrefix = 'PLATFORM_') {
         this.environmentVariables = env || process.env;
-        this.envPrefix = prefix;
+        this.varPrefix = varPrefix;
 
         // Node doesn't support pre-defined object properties in classes, so
         // this is mostly for documentation but also to ensure there's always
@@ -567,7 +567,7 @@ class Config {
      * @return {string|null}
      */
     _getValue(name) {
-        let checkName = this.envPrefix + name.toUpperCase();
+        let checkName = this.varPrefix + name.toUpperCase();
 
         return this.environmentVariables[checkName] || null;
     }
@@ -619,9 +619,9 @@ function puppeteerFormatter(credentials) {
  *
  * @returns {Config}
  */
-function config() {
+function config({ varPrefix } = {}) {
 
-    return new Config();
+    return new Config(null, varPrefix);
 }
 
 module.exports = {

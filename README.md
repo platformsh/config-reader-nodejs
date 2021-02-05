@@ -1,5 +1,7 @@
 # Platform.sh Config Reader (Node.js)
 
+![Quality Assurance](https://github.com/platformsh/config-reader-nodejs/workflows/Quality%20Assurance/badge.svg)
+
 This library provides a streamlined and easy to use way to interact with a Platform.sh environment.  It offers utility methods to access routes and relationships more cleanly than reading the raw environment variables yourself.
 
 This library requires Node.js 10 or later.
@@ -104,6 +106,13 @@ config.environment;
 config.socket;
 
 config.port;
+```
+
+By default, Platform.sh environment variables are prefixed with `PLATFORM_`. In some cases, you might need to change this default in order to have access to environment variables at build time (like with [create-react-app](https://create-react-app.dev/docs/adding-custom-environment-variables/)).
+
+You can do this like so:
+```js
+const config = require("platformsh-config").config({ varPrefix: "MY_PREFIX_" });
 ```
 
 ### Reading service credentials

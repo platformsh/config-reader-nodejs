@@ -129,7 +129,7 @@ To make sure that a relationship is defined before you try to access credentials
 
 ```js
 if (config.hasRelationship('database') {
-    creds = conifg.credentials('database');
+    creds = config.credentials('database');
     // ...
 }
 ```
